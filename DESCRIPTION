@@ -1,0 +1,16 @@
+Package: SynthCast
+Type: Package
+Title: Uses Synthetic Control Method to Forecast Series
+Version: 0.1.0
+Author: Vinicius M. de Sousa
+Maintainer: Vinicius M. de Sousa <vinisousa04@gmail.com>
+Description: The ideia behind this package is to have an practical approach for
+    when a forecast is needed to be done and there are no series long enough to use tradicional 
+    time series analysis. 
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: dplyr, tidyr, Synth, utils, forcats
+RoxygenNote: 7.1.1
+Depends: 
+    R (>= 2.10)

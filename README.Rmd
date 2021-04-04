@@ -1,0 +1,131 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+#library(dplyr,warn.conflicts=FALSE)
+library(knitr)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# SyntheticForecast
+
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badges: end -->
+
+The objective of the package is to provide an heuristic to forecast a serie when you dont have data to use a traditional time serie approach.
+
+### Main Use Case and Assumtion
+
+An unit can be represented as ... and their behavior is assumed to be the same.
+
+## Instalation
+
+```{r, eval=F} 
+# Pacote com função para instalar repo do github
+install.packages("devtools") 
+
+# Instalando o SyntheticForecast
+devtools::install_github(
+    "viniciusmsousa/SynthCast",ref="main"
+)
+```
+
+## Example
+
+lets forecast the next 12 perios for the unit 30.
+
+```{r}
+# Carregando Pacote 
+library(SyntheticForecast)
+# Carregando dataset exemplo do pacote
+data('df_example')
+kable(head(df_example)) 
+```
+
+
+Main function is 
+
+```{r, message=F}
+synthetic_forecast <- run_synthetic_forecast(
+  df = df_example,
+  col_unit_name = 'unit',
+  col_time='time_period',
+  periods_to_forecast=12,
+  unit_of_interest = '30',
+  serie_of_interest = 'x1'
+)
+```
+
+The output object is composed of 4 tables.
+
+
+### Table 1: `synthetic_control_composition`
+
+```{r}
+kable(synthetic_forecast$synthetic_control_composition)
+```
+
+
+- `execution_date`: [...]
+- `projected_unit`: [...]
+- `projected_serie`: [...]
+- `synthetic_units`/`w.weights`: [...].
+
+### Table 2: `variable_importance_and_comparison`
+
+
+```{r}
+kable(head(synthetic_forecast$variable_importance_and_comparison,8))
+```
+
+
+- `execution_date`: [...]
+- `projected_unit`: [...]
+- `projected_serie`: [...]
+- `variable`: [...]
+- `unit_of_interest`: [...]
+- `synthetic`: [...]
+- `sample`: [...]
+- `v.weights`: [...] 
+
+### Table 3: `mape_backtest`
+
+
+```{r}
+kable(synthetic_forecast$mape_backtest)
+```
+
+
+- `execution_date`: [...]
+- `projected_unit`: [...]
+- `projected_serie`: [...]
+- `max_time_unit_of_interest`: [...]
+- `periods_to_forecast`: [...]
+`elegible_control_units`: [...]
+`mape`: [...]
+
+
+### Table 4: `output_projecao`
+
+
+```{r}
+kable(synthetic_forecast$output_projecao)
+```
+
+
+- `execution_date`: [...]
+- `projected_unit`: [...]
+- `time_period`: [...]
+- `projected_serie`: [...]
+- `projected_serie_value`: [...]
+- `is_projected`: [...]
+
