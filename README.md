@@ -12,7 +12,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 The objective of the package is to provide an heuristic to forecast a
 serie when you dont have data to use a traditional time serie approach.
 
-### Main Use Case and Assumtion
+### Main Use Case and Assumption
 
 An unit can be represented as … and their behavior is assumed to be the
 same.

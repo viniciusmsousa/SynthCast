@@ -9,7 +9,6 @@ A dataframe with 1275 rows e 32 variaveis:
 \describe{
   \item{unit}{Unit identification}
   \item{time_period}{Time period, ascending integers.}
-  \item{y_cumsum}{Y value acumulated over the time periods.}
   \item{x1-x28}{Variables.}
 }
 }
