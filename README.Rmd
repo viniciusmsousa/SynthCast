@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# SyntheticForecast
+# SynthCast
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
@@ -30,10 +30,7 @@ An unit can be represented as ... and their behavior is assumed to be the same.
 ## Instalation
 
 ```{r, eval=F} 
-# Pacote com função para instalar repo do github
 install.packages("devtools") 
-
-# Instalando o SyntheticForecast
 devtools::install_github(
     "viniciusmsousa/SynthCast",ref="main"
 )
@@ -44,9 +41,7 @@ devtools::install_github(
 lets forecast the next 12 perios for the unit 30.
 
 ```{r}
-# Carregando Pacote 
 library(SyntheticForecast)
-# Carregando dataset exemplo do pacote
 data('df_example')
 kable(head(df_example)) 
 ```

@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# SyntheticForecast
+# SynthCast
 
 <!-- badges: start -->
 
@@ -20,10 +20,7 @@ same.
 ## Instalation
 
 ``` r
-# Pacote com função para instalar repo do github
 install.packages("devtools") 
-
-# Instalando o SyntheticForecast
 devtools::install_github(
     "viniciusmsousa/SynthCast",ref="main"
 )
@@ -34,9 +31,7 @@ devtools::install_github(
 lets forecast the next 12 perios for the unit 30.
 
 ``` r
-# Carregando Pacote 
 library(SyntheticForecast)
-# Carregando dataset exemplo do pacote
 data('df_example')
 kable(head(df_example)) 
 ```
