@@ -38,7 +38,7 @@ devtools::install_github(
 
 ## Example
 
-lets forecast the next 12 perios for the unit 30.
+lets forecast the next 12 periods for the unit 30.
 
 ```{r}
 library(SyntheticForecast)
