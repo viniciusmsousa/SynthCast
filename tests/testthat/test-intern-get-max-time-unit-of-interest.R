@@ -1,5 +1,3 @@
-data("df_example")
-
 test_that(
   desc = "Tests intern_get_max_time_unit_of_interest()",
   code = {
