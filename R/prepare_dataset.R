@@ -21,7 +21,7 @@ prepare_dataset <- function(
     {
       dataset <- df %>%
         mutate(
-          unit_name_id = as.integer(as_factor(!!sym(col_unit_name))),
+          unit_name_id = as.integer(as_factor(!!sym(all_of(col_unit_name)))),
           unit_name = as.character(!!sym('unit_name_id'))
         ) %>%
         filter(
@@ -29,12 +29,12 @@ prepare_dataset <- function(
         ) %>%
         left_join(
           df_elegible_units,
-          by = col_unit_name
+          by = all_of(col_unit_name)
         ) %>%
         filter(
-          (!!sym('manter') == T | !!sym(col_unit_name) == as.character(unit_of_interest))
+          (!!sym('manter') == T | !!sym(all_of(col_unit_name)) == as.character(unit_of_interest))
         ) %>%
-        select(-c(!!sym('col_unit_name'),!!sym('manter'))) %>%
+        select(-c(!!sym(all_of(col_unit_name)),!!sym('manter'))) %>%
         relocate(c(!!sym('unit_name'),!!sym('unit_name_id')))
     },
     error=function(cond){
