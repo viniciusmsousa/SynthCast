@@ -41,7 +41,7 @@ devtools::install_github(
 lets forecast the next 12 periods for the unit 30.
 
 ```{r}
-library(SyntheticForecast)
+library(SynthCast)
 data('df_example')
 kable(head(df_example)) 
 ```
