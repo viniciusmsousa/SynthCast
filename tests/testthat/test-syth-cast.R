@@ -54,7 +54,7 @@ test_that(
 )
 
 test_that(
-  desc = "Test intern_elegile_units()",
+  desc = "Tests intern_elegile_units()",
   code = {
     expect_equal(
       object = class(elegible),
@@ -97,7 +97,7 @@ test_that(
 )
 
 test_that(
-  desc = "tests compute_synthetic_control()",
+  desc = "Tests compute_synthetic_control()",
   code = {
     expect_equal(
       object = class(synthetic_control),
@@ -116,7 +116,7 @@ test_that(
 )
 
 test_that(
-  desc = "test argument type error in the run_synthetic_forecast()",
+  desc = "Test: argument type error in the run_synthetic_forecast()",
   code = {
     expect_error(
       object = run_synthetic_forecast(
