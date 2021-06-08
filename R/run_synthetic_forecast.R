@@ -16,9 +16,18 @@ run_synthetic_forecast <- function(
   df, col_unit_name, unit_of_interest, col_time, periods_to_forecast,
   serie_of_interest
 ){
+  # Testing argument types
+  stopifnot(
+    class(df)=="data.frame",
+    class(col_unit_name)=="character",
+    class(unit_of_interest)%in%c("integer", "character", "numeric"),
+    class(col_time)%in%c("integer", "numeric"),
+    class(periods_to_forecast)%in%c("integer", "numeric"),
+    class(serie_of_interest)%in%c("integer", "numeric")
+  )
   out <- tryCatch(
     {
-      print(paste("Forecasting Unit: ", unit_of_interest, ". Serie: ",serie_of_interest))
+      print(paste("Forecasting Unit: ", unit_of_interest, ". Serie: ", serie_of_interest))
       # 1) Retriving max time period of unit of interest
       intern_max_time_unit_interedt <- intern_get_max_time_unit_of_interest(
         df = df,

@@ -32,6 +32,7 @@ synthetic_control = compute_synthetic_control(
   max_time_unit_of_interest = max_time_unit
 )
 
+
 # Tests -------------------------------------------------------------------
 
 test_that(
@@ -95,7 +96,6 @@ test_that(
   }
 )
 
-
 test_that(
   desc = "tests compute_synthetic_control()",
   code = {
@@ -111,6 +111,55 @@ test_that(
     expect_equal(
       object = names(synthetic_control),
       expected = c("dataprep_out", "synth_out")
+    )
+  }
+)
+
+test_that(
+  desc = "test argument type error in the run_synthetic_forecast()",
+  code = {
+    expect_error(
+      object = run_synthetic_forecast(
+        df = tibble(),
+        col_unit_name = "unit",
+        unit_of_interest = 30,
+        col_time = "time_period",
+        periods_to_forecast = 6
+      ),
+      class = "simpleError"
+    )
+
+    expect_error(
+      object = run_synthetic_forecast(
+        df = df_example,
+        col_unit_name = 23,
+        unit_of_interest = 30,
+        col_time = "time_period",
+        periods_to_forecast = 6
+      ),
+      class = "simpleError"
+    )
+
+    expect_error(
+      object = run_synthetic_forecast(
+        df = df_example,
+        col_unit_name = 23,
+        unit_of_interest = "unit",
+        col_time = 23,
+        periods_to_forecast = 6
+      ),
+      class = "simpleError"
+    )
+
+    expect_error(
+      object = run_synthetic_forecast(
+        df = df_example,
+        col_unit_name = 23,
+        unit_of_interest = "unit",
+        col_time = "time_period",
+        periods_to_forecast = "period_non_numeric"
+      ),
+      class = "simpleError"
     )
   }
 )
