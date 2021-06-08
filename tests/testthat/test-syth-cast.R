@@ -24,6 +24,14 @@ prepared_df <- prepare_dataset(
   max_time_unit_of_interest = max_time_unit
 )
 
+synthetic_control = compute_synthetic_control(
+  prepared_dataset = prepared_df,
+  unit_of_interest = 30,
+  serie_of_interest = 'x1',
+  col_time = 'time_period',
+  max_time_unit_of_interest = max_time_unit
+)
+
 # Tests -------------------------------------------------------------------
 
 test_that(
@@ -83,6 +91,26 @@ test_that(
         "numeric", "numeric", "numeric", "numeric",
         "numeric", "numeric", "numeric"
       )
+    )
+  }
+)
+
+
+test_that(
+  desc = "tests compute_synthetic_control()",
+  code = {
+    expect_equal(
+      object = class(synthetic_control),
+      expected = c("list")
+    )
+    expect_equal(
+      length(synthetic_control),
+      expected = c(2)
+    )
+
+    expect_equal(
+      object = names(synthetic_control),
+      expected = c("dataprep_out", "synth_out")
     )
   }
 )
