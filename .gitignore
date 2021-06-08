@@ -3,3 +3,4 @@ renv/
 .Rprofile
 .Rproj.user/
 core*
+_pkgdown.yml
