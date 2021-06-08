@@ -73,7 +73,7 @@ run_synthetic_forecast <- function(
       compute_result_tables_out
     },
     error=function(cond){
-      print('Error in Function compute_result_tables():')
+      print('Error in Function run_synthetic_forecast():')
       cond
     }
   )
