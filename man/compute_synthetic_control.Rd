@@ -29,3 +29,14 @@ List with (i) Synth::dataprep() output and (ii) Synth::Synth() output.
 \description{
 Compute the synthetic control 9wraps Synth package).
 }
+\examples{
+\donttest{
+synthetic_control = compute_synthetic_control(
+prepared_dataset = prepared_df,
+unit_of_interest = 30,
+serie_of_interest = 'x1',
+col_time = 'time_period',
+max_time_unit_of_interest = max_time_unit
+)
+}
+}

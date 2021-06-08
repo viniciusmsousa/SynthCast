@@ -32,3 +32,16 @@ List with results table.
 \description{
 Executes all the other package functions in order to have a list with the results table.
 }
+\examples{
+\donttest{
+synthetic_forecast <- run_synthetic_forecast(
+df = df_example,
+col_unit_name = 'unit',
+col_time='time_period',
+periods_to_forecast=12,
+unit_of_interest = '30',
+serie_of_interest = 'x1'
+)
+}
+
+}

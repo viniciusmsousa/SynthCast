@@ -12,6 +12,18 @@
 #' @return List with results table.
 #' @export
 #'
+#' @examples
+#' \donttest{
+#' synthetic_forecast <- run_synthetic_forecast(
+#' df = df_example,
+#' col_unit_name = 'unit',
+#' col_time='time_period',
+#' periods_to_forecast=12,
+#' unit_of_interest = '30',
+#' serie_of_interest = 'x1'
+#' )
+#' }
+#'
 run_synthetic_forecast <- function(
   df, col_unit_name, unit_of_interest, col_time, periods_to_forecast,
   serie_of_interest
@@ -21,9 +33,9 @@ run_synthetic_forecast <- function(
     class(df)=="data.frame",
     class(col_unit_name)=="character",
     class(unit_of_interest)%in%c("integer", "character", "numeric"),
-    class(col_time)%in%c("integer", "numeric"),
+    class(col_time)%in%c("character"),
     class(periods_to_forecast)%in%c("integer", "numeric"),
-    class(serie_of_interest)%in%c("integer", "numeric")
+    class(serie_of_interest)%in%c("character")
   )
   out <- tryCatch(
     {

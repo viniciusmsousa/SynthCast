@@ -16,6 +16,16 @@
 #'
 #' @export
 #'
+#' @examples
+#' \donttest{
+#' synthetic_control = compute_synthetic_control(
+#' prepared_dataset = prepared_df,
+#' unit_of_interest = 30,
+#' serie_of_interest = 'x1',
+#' col_time = 'time_period',
+#' max_time_unit_of_interest = max_time_unit
+#' )
+#' }
 compute_synthetic_control <- function(
   prepared_dataset, unit_of_interest, serie_of_interest, col_time, max_time_unit_of_interest
 ){

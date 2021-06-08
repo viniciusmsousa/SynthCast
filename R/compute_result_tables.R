@@ -15,6 +15,20 @@
 #'
 #' @export
 #'
+#' @examples
+#' \donttest{
+#' compute_result_tables(
+#' df = df_example,
+#' synthetic_control_output = compute_synthetic_control(...),
+#' col_unit_name = "col_unit",
+#' unit_of_interest = 3,
+#' serie_of_interest = "col_serie",
+#' max_time_unit_of_interest = 21,
+#' periods_to_forecast = 6,
+#' col_time = "col_time"
+#' )
+#' }
+#'
 compute_result_tables <- function(
   df, synthetic_control_output, col_unit_name, unit_of_interest,
   serie_of_interest, max_time_unit_of_interest, periods_to_forecast, col_time

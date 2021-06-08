@@ -38,3 +38,18 @@ List with result tables.
 \description{
 compute_result_tables
 }
+\examples{
+\donttest{
+compute_result_tables(
+df = df_example,
+synthetic_control_output = compute_synthetic_control(...),
+col_unit_name = "col_unit",
+unit_of_interest = 3,
+serie_of_interest = "col_serie",
+max_time_unit_of_interest = 21,
+periods_to_forecast = 6,
+col_time = "col_time"
+)
+}
+
+}

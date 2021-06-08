@@ -14,6 +14,17 @@
 #'
 #' @export
 #'
+#' @examples
+#' \donttest{
+#' prepared_df <- prepare_dataset(
+#' df = df_example,
+#' df_elegible_units = elegible,
+#' col_unit_name = 'unit',
+#' col_time = 'time_period',
+#' unit_of_interest = 30,
+#' max_time_unit_of_interest = max_time_unit
+#' )
+#' }
 prepare_dataset <- function(
   df, df_elegible_units, col_unit_name, col_time, unit_of_interest, max_time_unit_of_interest
 ){

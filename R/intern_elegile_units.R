@@ -13,6 +13,16 @@
 #' @export
 #'
 #' @import dplyr
+#'
+#' @examples
+#' \donttest{
+#' elegible <- intern_elegile_units(
+#' df = df_example,
+#' col_time = 'time_period',
+#' max_time_unit_of_interest = 20,
+#' periods_to_forecast = 30
+#' )
+#' }
 intern_elegile_units <- function(
   df, col_unit_name, col_time, max_time_unit_of_interest, periods_to_forecast
 ){

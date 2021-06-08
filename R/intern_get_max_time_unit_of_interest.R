@@ -10,6 +10,15 @@
 #' @return Same type as col_time, max value.
 #' @export
 #'
+#' @examples
+#' \donttest{
+#' max_time_unit <- intern_get_max_time_unit_of_interest(
+#'   df = df_example,
+#'   col_unit_name = 'unit',
+#'   unit_of_interest = 30,
+#'   col_time = 'time_period'
+#' )
+#' }
 intern_get_max_time_unit_of_interest <- function(
   df, col_unit_name, unit_of_interest, col_time
 ){
