@@ -3,15 +3,15 @@ Type: Package
 Title: Use Synthetic Control Method to Forecast Series
 Version: 0.2.0
 Authors@R: 
-    c(person(given = "Vincicius",
+    c(person(given = "Vinicius",
              family = "Sousa",
              role = c("aut", "cph", "cre"),
              email = "vinisousa04@gmail.com"))
-Maintainer: Vinicius M. de Sousa <vinisousa04@gmail.com>
+Maintainer: Vinicius Sousa <vinisousa04@gmail.com>
 Description: The ideia behind this package is to have an practical approach
     when a forecast is needed to be done with panel data and there are no series long enough to use tradicional 
     time series analysis. 
-License: file LICENSE
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Imports: dplyr, tidyr, Synth, utils, forcats
