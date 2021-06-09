@@ -7,17 +7,55 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+
 <!-- badges: end -->
 
-The objective of the package is to provide an heuristic to forecast a
-serie when you dont have data to use a traditional time serie approach.
+## Objective
 
-### Main Use Case and Assumption
+The objective of the package is to provide an *ad-hoc* forecasting
+approach for problems where (i) there are units in different stages of a
+certain journey, (ii) there the assumption that the units’ behavior
+throw out the journey are similar is valid and (iii) there are not
+enough data to use traditional forecasting methods. A practical example
+might help to better illustrate such problems.
+
+## Example of Problem that Could Benefit from the Package
+
+Take the credit card business for example. The profit from credit card
+products comes from the sum of financial results of each individual. It
+is known that every customer starts with a negative result, since the
+bank had to spend money to attract the customers, so you have an
+acquisition cost. Once a costumer get his/her card he/she can either
+start using the credit card or simply keep it without using. In the
+first case, if the person pays credit card bills: great, there will be
+revenue until it reaches a payback moment and starts having a profitable
+result. But if the person fails to pay the bills then the result will be
+a lost. On the other hand, if the customer simply does not use the
+credit card, then its financial result will move horizontally.
+
+In this scenario, the units are the clients (or group of clients), the
+journey is the profitability of a credit card product and there is no
+reason to believe that the profitability over time of a new client would
+have a different shape of the options above (of course it will not be
+identical). Now, imagine that the product is relatively new, around 2\~3
+years. This means that the older profitability series is around 24/36
+months. But the majority of series would be smaller. There is not enough
+data to use time series algorithms with ease. So, the idea is to use the
+older clients, that are in their 24/36 months, to predict how the newer
+clients would be in their 24/36 months.
+
+In order to do so, the SynthCast uses the [Synthetic
+Control](https://www.jstatsoft.org/article/view/v042i13) Method to find
+a synthetic combination that represents the unit of interest based on a
+series of numerical features. The following section goes through ans
+usage example of the package.
+
+## Usage
 
 An unit can be represented as … and their behavior is assumed to be the
 same.
 
-## Instalation
+### Instalation
 
 ``` r
 install.packages("devtools") 
@@ -88,15 +126,15 @@ kable(synthetic_forecast$synthetic_control_composition)
 
 | execution\_date | projected\_unit | projected\_serie | synthetic\_units | w.weights |
 |:----------------|:----------------|:-----------------|:-----------------|----------:|
-| 2021-06-08      | 30              | x1               | 10               |     0.550 |
-| 2021-06-08      | 30              | x1               | 18               |     0.314 |
-| 2021-06-08      | 30              | x1               | 17               |     0.129 |
-| 2021-06-08      | 30              | x1               | 8                |     0.001 |
-| 2021-06-08      | 30              | x1               | 9                |     0.001 |
-| 2021-06-08      | 30              | x1               | 12               |     0.001 |
-| 2021-06-08      | 30              | x1               | 14               |     0.001 |
-| 2021-06-08      | 30              | x1               | 15               |     0.001 |
-| 2021-06-08      | 30              | x1               | 16               |     0.001 |
+| 2021-06-09      | 30              | x1               | 10               |     0.550 |
+| 2021-06-09      | 30              | x1               | 18               |     0.314 |
+| 2021-06-09      | 30              | x1               | 17               |     0.129 |
+| 2021-06-09      | 30              | x1               | 8                |     0.001 |
+| 2021-06-09      | 30              | x1               | 9                |     0.001 |
+| 2021-06-09      | 30              | x1               | 12               |     0.001 |
+| 2021-06-09      | 30              | x1               | 14               |     0.001 |
+| 2021-06-09      | 30              | x1               | 15               |     0.001 |
+| 2021-06-09      | 30              | x1               | 16               |     0.001 |
 
 -   `execution_date`: \[…\]
 -   `projected_unit`: \[…\]
@@ -111,14 +149,14 @@ kable(head(synthetic_forecast$variable_importance_and_comparison,8))
 
 | execution\_date | projected\_unit | projected\_serie | variable | unit\_of\_interest | synthetic | sample | v.weights |
 |:----------------|:----------------|:-----------------|:---------|-------------------:|----------:|-------:|----------:|
-| 2021-06-08      | 30              | x1               | x8       |              0.474 |     0.550 |  0.567 |     0.129 |
-| 2021-06-08      | 30              | x1               | x20      |              0.537 |     0.613 |  0.630 |     0.128 |
-| 2021-06-08      | 30              | x1               | x7       |              0.110 |     0.099 |  0.088 |     0.123 |
-| 2021-06-08      | 30              | x1               | x16      |              0.289 |     0.192 |  0.168 |     0.080 |
-| 2021-06-08      | 30              | x1               | x13      |              0.237 |     0.145 |  0.116 |     0.062 |
-| 2021-06-08      | 30              | x1               | x9       |              0.443 |     0.441 |  0.433 |     0.058 |
-| 2021-06-08      | 30              | x1               | x25      |              0.517 |     0.370 |  0.317 |     0.045 |
-| 2021-06-08      | 30              | x1               | x24      |              0.729 |     0.709 |  0.699 |     0.044 |
+| 2021-06-09      | 30              | x1               | x8       |              0.474 |     0.550 |  0.567 |     0.129 |
+| 2021-06-09      | 30              | x1               | x20      |              0.537 |     0.613 |  0.630 |     0.128 |
+| 2021-06-09      | 30              | x1               | x7       |              0.110 |     0.099 |  0.088 |     0.123 |
+| 2021-06-09      | 30              | x1               | x16      |              0.289 |     0.192 |  0.168 |     0.080 |
+| 2021-06-09      | 30              | x1               | x13      |              0.237 |     0.145 |  0.116 |     0.062 |
+| 2021-06-09      | 30              | x1               | x9       |              0.443 |     0.441 |  0.433 |     0.058 |
+| 2021-06-09      | 30              | x1               | x25      |              0.517 |     0.370 |  0.317 |     0.045 |
+| 2021-06-09      | 30              | x1               | x24      |              0.729 |     0.709 |  0.699 |     0.044 |
 
 -   `execution_date`: \[…\]
 -   `projected_unit`: \[…\]
@@ -137,7 +175,7 @@ kable(synthetic_forecast$mape_backtest)
 
 | execution\_date | projected\_unit | projected\_serie | max\_time\_unit\_of\_interest | periods\_to\_forecast | elegible\_control\_units | number\_control\_units |     mape |
 |:----------------|:----------------|:-----------------|------------------------------:|----------------------:|-------------------------:|-----------------------:|---------:|
-| 2021-06-08      | 30              | x1               |                            21 |                    12 |                       17 |                      9 | 13.00928 |
+| 2021-06-09      | 30              | x1               |                            21 |                    12 |                       17 |                      9 | 13.00928 |
 
 -   `execution_date`: \[…\]
 -   `projected_unit`: \[…\]
@@ -154,39 +192,39 @@ kable(synthetic_forecast$output_projecao)
 
 | execution\_date | projected\_unit | time\_period | projected\_serie\_value | is\_projected | projected\_serie |
 |:----------------|:----------------|-------------:|------------------------:|--------------:|:-----------------|
-| 2021-06-08      | 30              |            1 |               0.4354680 |             0 | x1               |
-| 2021-06-08      | 30              |            2 |               0.4321821 |             0 | x1               |
-| 2021-06-08      | 30              |            3 |               0.5256354 |             0 | x1               |
-| 2021-06-08      | 30              |            4 |               0.4840789 |             0 | x1               |
-| 2021-06-08      | 30              |            5 |               0.3801790 |             0 | x1               |
-| 2021-06-08      | 30              |            6 |               0.2640425 |             0 | x1               |
-| 2021-06-08      | 30              |            7 |               0.1495329 |             0 | x1               |
-| 2021-06-08      | 30              |            8 |               0.2581808 |             0 | x1               |
-| 2021-06-08      | 30              |            9 |               0.2937315 |             0 | x1               |
-| 2021-06-08      | 30              |           10 |               0.3000216 |             0 | x1               |
-| 2021-06-08      | 30              |           11 |               0.3381660 |             0 | x1               |
-| 2021-06-08      | 30              |           12 |               0.3035805 |             0 | x1               |
-| 2021-06-08      | 30              |           13 |               0.2989308 |             0 | x1               |
-| 2021-06-08      | 30              |           14 |               0.6051545 |             0 | x1               |
-| 2021-06-08      | 30              |           15 |               0.3462337 |             0 | x1               |
-| 2021-06-08      | 30              |           16 |               0.3895760 |             0 | x1               |
-| 2021-06-08      | 30              |           17 |               0.4199159 |             0 | x1               |
-| 2021-06-08      | 30              |           18 |               0.4777851 |             0 | x1               |
-| 2021-06-08      | 30              |           19 |               0.5354843 |             0 | x1               |
-| 2021-06-08      | 30              |           20 |               0.4860005 |             0 | x1               |
-| 2021-06-08      | 30              |           21 |               0.4963447 |             0 | x1               |
-| 2021-06-08      | 30              |           22 |               0.4928737 |             1 | x1               |
-| 2021-06-08      | 30              |           23 |               0.4534551 |             1 | x1               |
-| 2021-06-08      | 30              |           24 |               0.4750725 |             1 | x1               |
-| 2021-06-08      | 30              |           25 |               0.4928884 |             1 | x1               |
-| 2021-06-08      | 30              |           26 |               0.7005200 |             1 | x1               |
-| 2021-06-08      | 30              |           27 |               0.3911140 |             1 | x1               |
-| 2021-06-08      | 30              |           28 |               0.4438282 |             1 | x1               |
-| 2021-06-08      | 30              |           29 |               0.4673172 |             1 | x1               |
-| 2021-06-08      | 30              |           30 |               0.4722184 |             1 | x1               |
-| 2021-06-08      | 30              |           31 |               0.4898868 |             1 | x1               |
-| 2021-06-08      | 30              |           32 |               0.5014260 |             1 | x1               |
-| 2021-06-08      | 30              |           33 |               0.4313357 |             1 | x1               |
+| 2021-06-09      | 30              |            1 |               0.4354680 |             0 | x1               |
+| 2021-06-09      | 30              |            2 |               0.4321821 |             0 | x1               |
+| 2021-06-09      | 30              |            3 |               0.5256354 |             0 | x1               |
+| 2021-06-09      | 30              |            4 |               0.4840789 |             0 | x1               |
+| 2021-06-09      | 30              |            5 |               0.3801790 |             0 | x1               |
+| 2021-06-09      | 30              |            6 |               0.2640425 |             0 | x1               |
+| 2021-06-09      | 30              |            7 |               0.1495329 |             0 | x1               |
+| 2021-06-09      | 30              |            8 |               0.2581808 |             0 | x1               |
+| 2021-06-09      | 30              |            9 |               0.2937315 |             0 | x1               |
+| 2021-06-09      | 30              |           10 |               0.3000216 |             0 | x1               |
+| 2021-06-09      | 30              |           11 |               0.3381660 |             0 | x1               |
+| 2021-06-09      | 30              |           12 |               0.3035805 |             0 | x1               |
+| 2021-06-09      | 30              |           13 |               0.2989308 |             0 | x1               |
+| 2021-06-09      | 30              |           14 |               0.6051545 |             0 | x1               |
+| 2021-06-09      | 30              |           15 |               0.3462337 |             0 | x1               |
+| 2021-06-09      | 30              |           16 |               0.3895760 |             0 | x1               |
+| 2021-06-09      | 30              |           17 |               0.4199159 |             0 | x1               |
+| 2021-06-09      | 30              |           18 |               0.4777851 |             0 | x1               |
+| 2021-06-09      | 30              |           19 |               0.5354843 |             0 | x1               |
+| 2021-06-09      | 30              |           20 |               0.4860005 |             0 | x1               |
+| 2021-06-09      | 30              |           21 |               0.4963447 |             0 | x1               |
+| 2021-06-09      | 30              |           22 |               0.4928737 |             1 | x1               |
+| 2021-06-09      | 30              |           23 |               0.4534551 |             1 | x1               |
+| 2021-06-09      | 30              |           24 |               0.4750725 |             1 | x1               |
+| 2021-06-09      | 30              |           25 |               0.4928884 |             1 | x1               |
+| 2021-06-09      | 30              |           26 |               0.7005200 |             1 | x1               |
+| 2021-06-09      | 30              |           27 |               0.3911140 |             1 | x1               |
+| 2021-06-09      | 30              |           28 |               0.4438282 |             1 | x1               |
+| 2021-06-09      | 30              |           29 |               0.4673172 |             1 | x1               |
+| 2021-06-09      | 30              |           30 |               0.4722184 |             1 | x1               |
+| 2021-06-09      | 30              |           31 |               0.4898868 |             1 | x1               |
+| 2021-06-09      | 30              |           32 |               0.5014260 |             1 | x1               |
+| 2021-06-09      | 30              |           33 |               0.4313357 |             1 | x1               |
 
 -   `execution_date`: \[…\]
 -   `projected_unit`: \[…\]

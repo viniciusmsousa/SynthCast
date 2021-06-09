@@ -18,18 +18,30 @@ knitr::opts_chunk$set(
 # SynthCast
 
 <!-- badges: start -->
+
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+
 <!-- badges: end -->
 
-The objective of the package is to provide an heuristic to forecast a serie when you dont have data to use a traditional time serie approach.
+## Objective
 
-### Main Use Case and Assumption
+The objective of the package is to provide an *ad-hoc* forecasting approach for problems where (i) there are units in different stages of a certain journey, (ii) there the assumption that the units' behavior throw out the journey are similar is valid and (iii) there are not enough data to use traditional forecasting methods. A practical example might help to better illustrate such problems.
+
+## Example of Problem that Could Benefit from the Package
+
+Take the credit card business for example. The profit from credit card products comes from the sum of financial results of each individual. It is known that every customer starts with a negative result, since the bank had to spend money to attract the customers, so you have an acquisition cost. Once a costumer get his/her card he/she can either start using the credit card or simply keep it without using. In the first case, if the person pays credit card bills: great, there will be revenue until it reaches a payback moment and starts having a profitable result. But if the person fails to pay the bills then the result will be a lost. On the other hand, if the customer simply does not use the credit card, then its financial result will move horizontally.
+
+In this scenario, the units are the clients (or group of clients), the journey is the profitability of a credit card product and there is no reason to believe that the profitability over time of a new client would have a different shape of the options above (of course it will not be identical). Now, imagine that the product is relatively new, around 2\~3 years. This means that the older profitability series is around 24/36 months. But the majority of series would be smaller. There is not enough data to use time series algorithms with ease. So, the idea is to use the older clients, that are in their 24/36 months, to predict how the newer clients would be in their 24/36 months.
+
+In order to do so, the SynthCast uses the [Synthetic Control](https://www.jstatsoft.org/article/view/v042i13) Method to find a synthetic combination that represents the unit of interest based on a series of numerical features. The following section goes through ans usage example of the package.
+
+## Usage
 
 An unit can be represented as ... and their behavior is assumed to be the same.
 
-## Instalation
+### Instalation
 
-```{r, eval=F} 
+```{r, eval=F}
 install.packages("devtools") 
 devtools::install_github(
     "viniciusmsousa/SynthCast",ref="main"
@@ -46,8 +58,7 @@ data('df_example')
 kable(head(df_example)) 
 ```
 
-
-Main function is 
+Main function is
 
 ```{r, message=F}
 synthetic_forecast <- run_synthetic_forecast(
@@ -62,65 +73,53 @@ synthetic_forecast <- run_synthetic_forecast(
 
 The output object is composed of 4 tables.
 
-
 ### Table 1: `synthetic_control_composition`
 
 ```{r}
 kable(synthetic_forecast$synthetic_control_composition)
 ```
 
-
-- `execution_date`: [...]
-- `projected_unit`: [...]
-- `projected_serie`: [...]
-- `synthetic_units`/`w.weights`: [...].
+-   `execution_date`: [...]
+-   `projected_unit`: [...]
+-   `projected_serie`: [...]
+-   `synthetic_units`/`w.weights`: [...].
 
 ### Table 2: `variable_importance_and_comparison`
-
 
 ```{r}
 kable(head(synthetic_forecast$variable_importance_and_comparison,8))
 ```
 
-
-- `execution_date`: [...]
-- `projected_unit`: [...]
-- `projected_serie`: [...]
-- `variable`: [...]
-- `unit_of_interest`: [...]
-- `synthetic`: [...]
-- `sample`: [...]
-- `v.weights`: [...] 
+-   `execution_date`: [...]
+-   `projected_unit`: [...]
+-   `projected_serie`: [...]
+-   `variable`: [...]
+-   `unit_of_interest`: [...]
+-   `synthetic`: [...]
+-   `sample`: [...]
+-   `v.weights`: [...]
 
 ### Table 3: `mape_backtest`
-
 
 ```{r}
 kable(synthetic_forecast$mape_backtest)
 ```
 
-
-- `execution_date`: [...]
-- `projected_unit`: [...]
-- `projected_serie`: [...]
-- `max_time_unit_of_interest`: [...]
-- `periods_to_forecast`: [...]
-`elegible_control_units`: [...]
-`mape`: [...]
-
+-   `execution_date`: [...]
+-   `projected_unit`: [...]
+-   `projected_serie`: [...]
+-   `max_time_unit_of_interest`: [...]
+-   `periods_to_forecast`: [...] `elegible_control_units`: [...] `mape`: [...]
 
 ### Table 4: `output_projecao`
-
 
 ```{r}
 kable(synthetic_forecast$output_projecao)
 ```
 
-
-- `execution_date`: [...]
-- `projected_unit`: [...]
-- `time_period`: [...]
-- `projected_serie`: [...]
-- `projected_serie_value`: [...]
-- `is_projected`: [...]
-
+-   `execution_date`: [...]
+-   `projected_unit`: [...]
+-   `time_period`: [...]
+-   `projected_serie`: [...]
+-   `projected_serie_value`: [...]
+-   `is_projected`: [...]
