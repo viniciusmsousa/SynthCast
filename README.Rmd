@@ -39,8 +39,13 @@ In order to do so, the SynthCast uses the [Synthetic Control](https://www.jstats
 
 ### Instalation
 
-The package can be installed from github:
+The package can be installed from Cran:
+```{r install from cran command, eval=F}
+install.packages("SynthCast")
+```
 
+
+As well as from github:
 ```{r install from github command, eval=F}
 devtools::install_github(
     "viniciusmsousa/SynthCast",ref="main"

@@ -56,7 +56,13 @@ usage example of the package.
 
 ### Instalation
 
-The package can be installed from github:
+The package can be installed from Cran:
+
+``` r
+install.packages("SynthCast")
+```
+
+As well as from github:
 
 ``` r
 devtools::install_github(
