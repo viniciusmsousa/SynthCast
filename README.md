@@ -213,7 +213,7 @@ kable(synthetic_forecast$synthetic_control_composition)
 -   `synthetic_units`/`w.weights`: the units (from `18` to `1`) selected
     and their recpective weights.
 
-### Table 2: `variable_importance_and_comparison`
+#### Table 2: `variable_importance_and_comparison`
 
 This table summarizes the results related to the features/variables
 selection from the Synthetic Control method. The columns are the
@@ -247,7 +247,7 @@ kable(head(synthetic_forecast$variable_importance_and_comparison,8))
     `variable` of the whole dataset;
 -   `v.weights`: The weight of the variable in the column `variable`.
 
-### Table 3: `mape_backtest`
+#### Table 3: `mape_backtest`
 
 This table depicts the results of a simple mape back test on the period
 it was used to forecast. It is worth noting that the intention is not to
@@ -275,7 +275,7 @@ kable(synthetic_forecast$mape_backtest)
 -   `mape`: The mean absolute percentage error in the from 1 to
     `max_time_unit_of_interest`.
 
-### Table 4: `output_projecao`
+#### Table 4: `output_projecao`
 
 This tables contains the projection itself. The columns are the
 following:
