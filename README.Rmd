@@ -20,37 +20,73 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/viniciusmsousa/SynthCast/workflows/R-CMD-check/badge.svg)](https://github.com/viniciusmsousa/SynthCast/actions)
+[![Codecov test coverage](https://codecov.io/gh/viniciusmsousa/SynthCast/branch/main/graph/badge.svg)](https://codecov.io/gh/viniciusmsousa/SynthCast?branch=main)
 <!-- badges: end -->
 
-The objective of the package is to provide an heuristic to forecast a serie when you dont have data to use a traditional time serie approach.
+## Objective
 
-### Main Use Case and Assumption
+The objective of the package is to provide an *ad-hoc* forecasting approach for problems where (i) there are units in different stages of a certain journey, (ii) there the assumption that the units' behavior throw out the journey are similar is valid and (iii) there are not enough data to use traditional forecasting methods. A practical example might help to better illustrate such problems.
 
-An unit can be represented as ... and their behavior is assumed to be the same.
+## Example of Problem that Could Benefit from the Package
 
-## Instalation
+Take the credit card business for example. The profit from credit card products comes from the sum of financial results of each individual. It is known that every customer starts with a negative result, since the bank had to spend money to attract the customers, so you have an acquisition cost. Once a costumer get his/her card he/she can either start using the credit card or simply keep it without using. In the first case, if the person pays credit card bills: great, there will be revenue until it reaches a payback moment and starts having a profitable result. But if the person fails to pay the bills then the result will be a lost. On the other hand, if the customer simply does not use the credit card, then its financial result will move horizontally.
 
-```{r, eval=F} 
-install.packages("devtools") 
+In this scenario, the units are the clients (or group of clients), the journey is the profitability of a credit card product and there is no reason to believe that the profitability over time of a new client would have a different shape of the options above (of course it will not be identical). Now, imagine that the product is relatively new, around 2\~3 years. This means that the older profitability series is around 24/36 months. But the majority of series would be smaller. There is not enough data to use time series algorithms with ease. So, the idea is to use the older clients, that are in their 24/36 months, to predict how the newer clients would be in their 24/36 months.
+
+In order to do so, the SynthCast uses the [Synthetic Control](https://www.jstatsoft.org/article/view/v042i13) Method to find a synthetic combination that represents the unit of interest based on a series of numerical features. The following section goes through ans usage example of the package.
+
+## SynthCast Usage
+
+### Instalation
+
+The package can be installed either from CRAN:
+
+```{r install from cran command, eval=FALSE}
+install.packages("SynthCast")
+```
+
+As well as from github:
+
+```{r install from github command, eval=F}
 devtools::install_github(
     "viniciusmsousa/SynthCast",ref="main"
 )
 ```
 
-## Example
+### Example
 
-lets forecast the next 12 periods for the unit 30.
+This section is a walk through of how the package was inted to be used with a pratical example.
 
-```{r}
+#### The Dataset
+
+The first thing that a forecast needs a data to be forecasted. The SynthCast provides a example of how it expected a dataset to look like, the code bellow loads the package and the example dataset:
+
+```{r load SynthCast and df_example}
 library(SynthCast)
 data('df_example')
 kable(head(df_example)) 
 ```
 
+The dataset is expected to have 3 types of columns:
 
-Main function is 
+- 1) *A unit column*: containing a numeric identification of the unit. In the credit card example this could the the customer, a group of customer, etc.,;
+- 2) *A time columns*: containing the time in integer. In the credit card example this would be the age in months of the respective unit (say 1 for first month, 2 for the second month, etc.,);
+- 3) *Feature Columns*: Numeric features, with both the serie(s) that will be forecasted as well as features to use to forecast. In the credit card this could be the profitability and transactional features.
 
-```{r, message=F}
+The table bellow shows the max time for each unit:
+```{r table max time each unit, message=FALSE}
+library(dplyr)
+
+df_example %>%
+  group_by(unit) %>%
+  summarise(max_time_period=max(time_period)) %>%
+  filter(unit %in% c(1, 2, 3, 4, 5, 45, 46, 47, 48, 49, 50)) %>% 
+  kable()
+```
+As one can see the older unit (the smaller the number the older the unit is) the longer is the time series that are available (larger values in the `time_period` column). This means that the data from older units can be used to forecast the younger units. For example, the data from units ``r 30-12`` to `1` could be used to predict the next `12` periods of the unit `30`. This is excatly what the function `run_synthetic_forecast()` does (To better understand how it is working under the hood it is recommend to check the [Synthetic Control Synth Package paper](https://www.jstatsoft.org/article/view/v042i13).).
+
+The function call bellow runs a synthetic forecast of `12` time periods of the series `x1` of the unit 30.
+```{r run_synthetic_forecast function call, message=F}
 synthetic_forecast <- run_synthetic_forecast(
   df = df_example,
   col_unit_name = 'unit',
@@ -61,67 +97,69 @@ synthetic_forecast <- run_synthetic_forecast(
 )
 ```
 
-The output object is composed of 4 tables.
+The output of the function is a list with 4 tables.
 
+### Synthetic Forecat Results
 
-### Table 1: `synthetic_control_composition`
+These are the 4 tables that are returned by the function call.
+
+#### Table 1: `synthetic_control_composition`
+
+This table summarizes the results related to the unit selection from the Synthetic Control method. The columns are the following:
 
 ```{r}
 kable(synthetic_forecast$synthetic_control_composition)
 ```
+ 
+- `execution_date`: The date that the forecast was executed in the YYYY-MM-DD format;
+- `projected_unit`: The forcasted unit; 
+- `projected_serie`: The forecasted serie;
+- `synthetic_units`/`w.weights`: the units (from ``r 30-12`` to `1`) selected and their recpective weights.
 
+#### Table 2: `variable_importance_and_comparison`
 
-- `execution_date`: [...]
-- `projected_unit`: [...]
-- `projected_serie`: [...]
-- `synthetic_units`/`w.weights`: [...].
-
-### Table 2: `variable_importance_and_comparison`
-
+This table summarizes the results related to the features/variables selection from the Synthetic Control method. The columns are the following: 
 
 ```{r}
 kable(head(synthetic_forecast$variable_importance_and_comparison,8))
 ```
 
+- `execution_date`: The date that the forecast was executed in the YYYY-MM-DD format;
+- `projected_unit`: The forcasted unit; 
+- `projected_serie`: The forecasted serie;
+- `variable`: The variable selected;
+- `unit_of_interest`: The mean value over time of the variable in column `variable` from the unit in the `projected_unit`;
+- `synthetic`: The mean value over time of the variable in column `variable` of the syntehtic unit;
+- `sample`: The mean value over time of the variable in column `variable` of the whole dataset;
+- `v.weights`: The weight of the variable in the column `variable`.
 
-- `execution_date`: [...]
-- `projected_unit`: [...]
-- `projected_serie`: [...]
-- `variable`: [...]
-- `unit_of_interest`: [...]
-- `synthetic`: [...]
-- `sample`: [...]
-- `v.weights`: [...] 
+#### Table 3: `mape_backtest`
 
-### Table 3: `mape_backtest`
-
+This table depicts the results of a simple mape back test on the period it was used to forecast. It is worth noting that the intention is not to provide a robust method for validation the model. The Synthetic Control Method is a mathematical approach, not an machine learning, that minimizes the distance without worrying about overfitting the curves. The columns are the following:
 
 ```{r}
 kable(synthetic_forecast$mape_backtest)
 ```
 
+- `execution_date`: The date that the forecast was executed in the YYYY-MM-DD format;
+- `projected_unit`: The forcasted unit; 
+- `projected_serie`: The forecasted serie;
+- `max_time_unit_of_interest`: The age of the unit of interest;
+- `periods_to_forecast`: Periods that were forecasted;
+- `elegible_control_units`: Number of elegible units to be used to forecast;
+- `mape`: The mean absolute percentage error in the from 1 to `max_time_unit_of_interest`.
 
-- `execution_date`: [...]
-- `projected_unit`: [...]
-- `projected_serie`: [...]
-- `max_time_unit_of_interest`: [...]
-- `periods_to_forecast`: [...]
-`elegible_control_units`: [...]
-`mape`: [...]
+#### Table 4: `output_projecao`
 
-
-### Table 4: `output_projecao`
-
+This tables contains the projection itself. The columns are the following:
 
 ```{r}
 kable(synthetic_forecast$output_projecao)
 ```
 
-
-- `execution_date`: [...]
-- `projected_unit`: [...]
-- `time_period`: [...]
-- `projected_serie`: [...]
-- `projected_serie_value`: [...]
-- `is_projected`: [...]
-
+- `execution_date`: The date that the forecast was executed in the YYYY-MM-DD format;
+- `projected_unit`: The forcasted unit; 
+- `time_period`: The time period;
+- `projected_serie`: The forecasted serie;
+- `projected_serie_value`: The value of the seria/variable that was projected, from colun `projected_serie`;
+- `is_projected`: 1 indicates that the value is projected, 0 indicates that the value is observed.

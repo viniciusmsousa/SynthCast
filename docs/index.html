@@ -69,26 +69,42 @@
 <a href="#synthcast" class="anchor"></a>SynthCast</h1></div>
 <!-- badges: start -->
 
-<p>The objective of the package is to provide an heuristic to forecast a serie when you dont have data to use a traditional time serie approach.</p>
-<div id="main-use-case-and-assumption" class="section level3">
-<h3 class="hasAnchor">
-<a href="#main-use-case-and-assumption" class="anchor"></a>Main Use Case and Assumption</h3>
-<p>An unit can be represented as … and their behavior is assumed to be the same.</p>
-</div>
-<div id="instalation" class="section level2">
+<div id="objective" class="section level2">
 <h2 class="hasAnchor">
-<a href="#instalation" class="anchor"></a>Instalation</h2>
+<a href="#objective" class="anchor"></a>Objective</h2>
+<p>The objective of the package is to provide an <em>ad-hoc</em> forecasting approach for problems where (i) there are units in different stages of a certain journey, (ii) there the assumption that the units’ behavior throw out the journey are similar is valid and (iii) there are not enough data to use traditional forecasting methods. A practical example might help to better illustrate such problems.</p>
+</div>
+<div id="example-of-problem-that-could-benefit-from-the-package" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example-of-problem-that-could-benefit-from-the-package" class="anchor"></a>Example of Problem that Could Benefit from the Package</h2>
+<p>Take the credit card business for example. The profit from credit card products comes from the sum of financial results of each individual. It is known that every customer starts with a negative result, since the bank had to spend money to attract the customers, so you have an acquisition cost. Once a costumer get his/her card he/she can either start using the credit card or simply keep it without using. In the first case, if the person pays credit card bills: great, there will be revenue until it reaches a payback moment and starts having a profitable result. But if the person fails to pay the bills then the result will be a lost. On the other hand, if the customer simply does not use the credit card, then its financial result will move horizontally.</p>
+<p>In this scenario, the units are the clients (or group of clients), the journey is the profitability of a credit card product and there is no reason to believe that the profitability over time of a new client would have a different shape of the options above (of course it will not be identical). Now, imagine that the product is relatively new, around 2~3 years. This means that the older profitability series is around 24/36 months. But the majority of series would be smaller. There is not enough data to use time series algorithms with ease. So, the idea is to use the older clients, that are in their 24/36 months, to predict how the newer clients would be in their 24/36 months.</p>
+<p>In order to do so, the SynthCast uses the <a href="https://www.jstatsoft.org/article/view/v042i13">Synthetic Control</a> Method to find a synthetic combination that represents the unit of interest based on a series of numerical features. The following section goes through ans usage example of the package.</p>
+</div>
+<div id="synthcast-usage" class="section level2">
+<h2 class="hasAnchor">
+<a href="#synthcast-usage" class="anchor"></a>SynthCast Usage</h2>
+<div id="instalation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#instalation" class="anchor"></a>Instalation</h3>
+<p>The package can be installed either from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span> 
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"SynthCast"</span><span class="op">)</span></code></pre></div>
+<p>As well as from github:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span>
     <span class="st">"viniciusmsousa/SynthCast"</span>,ref<span class="op">=</span><span class="st">"main"</span>
 <span class="op">)</span></code></pre></div>
 </div>
-<div id="example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
-<p>lets forecast the next 12 periods for the unit 30.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div id="example" class="section level3">
+<h3 class="hasAnchor">
+<a href="#example" class="anchor"></a>Example</h3>
+<p>This section is a walk through of how the package was inted to be used with a pratical example.</p>
+<div id="the-dataset" class="section level4">
+<h4 class="hasAnchor">
+<a href="#the-dataset" class="anchor"></a>The Dataset</h4>
+<p>The first thing that a forecast needs a data to be forecasted. The SynthCast provides a example of how it expected a dataset to look like, the code bellow loads the package and the example dataset:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">SynthCast</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">'df_example'</span><span class="op">)</span>
 <span class="fu">kable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">df_example</span><span class="op">)</span><span class="op">)</span> </code></pre></div>
@@ -352,8 +368,85 @@
 </tr>
 </tbody>
 </table>
-<p>Main function is</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<p>The dataset is expected to have 3 types of columns:</p>
+<ul>
+<li><ol>
+<li>
+<em>A unit column</em>: containing a numeric identification of the unit. In the credit card example this could the the customer, a group of customer, etc.,;</li>
+</ol></li>
+<li><ol>
+<li>
+<em>A time columns</em>: containing the time in integer. In the credit card example this would be the age in months of the respective unit (say 1 for first month, 2 for the second month, etc.,);</li>
+</ol></li>
+<li><ol>
+<li>
+<em>Feature Columns</em>: Numeric features, with both the serie(s) that will be forecasted as well as features to use to forecast. In the credit card this could be the profitability and transactional features.</li>
+</ol></li>
+</ul>
+<p>The table bellow shows the max time for each unit:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+
+<span class="va">df_example</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">unit</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>max_time_period<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">time_period</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">unit</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">45</span>, <span class="fl">46</span>, <span class="fl">47</span>, <span class="fl">48</span>, <span class="fl">49</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="right">unit</th>
+<th align="right">max_time_period</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">50</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">49</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">48</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">47</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">46</td>
+</tr>
+<tr class="even">
+<td align="right">45</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="right">46</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="right">47</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="right">48</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">49</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">50</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>As one can see the older unit (the smaller the number the older the unit is) the longer is the time series that are available (larger values in the <code>time_period</code> column). This means that the data from older units can be used to forecast the younger units. For example, the data from units <code>18</code> to <code>1</code> could be used to predict the next <code>12</code> periods of the unit <code>30</code>. This is excatly what the function <code><a href="reference/run_synthetic_forecast.html">run_synthetic_forecast()</a></code> does (To better understand how it is working under the hood it is recommend to check the <a href="https://www.jstatsoft.org/article/view/v042i13">Synthetic Control Synth Package paper</a>.).</p>
+<p>The function call bellow runs a synthetic forecast of <code>12</code> time periods of the series <code>x1</code> of the unit 30.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">synthetic_forecast</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/run_synthetic_forecast.html">run_synthetic_forecast</a></span><span class="op">(</span>
   df <span class="op">=</span> <span class="va">df_example</span>,
   col_unit_name <span class="op">=</span> <span class="st">'unit'</span>,
@@ -382,12 +475,19 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; solution.w:</span>
 <span class="co">#&gt;  1.1452e-05 0.0002666085 0.0001873182 0.0002686277 0.0001636778 0.0003347625 0.0004905744 0.0005939929 0.0005203545 0.5502766 4.8739e-06 0.0007708196 0.0003844661 0.001002508 0.000803214 0.000999687 0.1285913 0.3143298</span></code></pre></div>
-<p>The output object is composed of 4 tables.</p>
-<div id="table-1-synthetic_control_composition" class="section level3">
+<p>The output of the function is a list with 4 tables.</p>
+</div>
+</div>
+<div id="synthetic-forecat-results" class="section level3">
 <h3 class="hasAnchor">
+<a href="#synthetic-forecat-results" class="anchor"></a>Synthetic Forecat Results</h3>
+<p>These are the 4 tables that are returned by the function call.</p>
+<div id="table-1-synthetic_control_composition" class="section level4">
+<h4 class="hasAnchor">
 <a href="#table-1-synthetic_control_composition" class="anchor"></a>Table 1: <code>synthetic_control_composition</code>
-</h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+</h4>
+<p>This table summarizes the results related to the unit selection from the Synthetic Control method. The columns are the following:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">kable</span><span class="op">(</span><span class="va">synthetic_forecast</span><span class="op">$</span><span class="va">synthetic_control_composition</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -399,63 +499,63 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="left">x1</td>
 <td align="left">10</td>
 <td align="right">0.550</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="left">x1</td>
 <td align="left">18</td>
 <td align="right">0.314</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="left">x1</td>
 <td align="left">17</td>
 <td align="right">0.129</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="left">x1</td>
 <td align="left">8</td>
 <td align="right">0.001</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="left">x1</td>
 <td align="left">9</td>
 <td align="right">0.001</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="left">x1</td>
 <td align="left">12</td>
 <td align="right">0.001</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="left">x1</td>
 <td align="left">14</td>
 <td align="right">0.001</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="left">x1</td>
 <td align="left">15</td>
 <td align="right">0.001</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="left">x1</td>
 <td align="left">16</td>
@@ -465,23 +565,21 @@
 </table>
 <ul>
 <li>
-<code>execution_date</code>: <span class="math display">…</span>
-</li>
+<code>execution_date</code>: The date that the forecast was executed in the YYYY-MM-DD format;</li>
 <li>
-<code>projected_unit</code>: <span class="math display">…</span>
-</li>
+<code>projected_unit</code>: The forcasted unit;</li>
 <li>
-<code>projected_serie</code>: <span class="math display">…</span>
-</li>
+<code>projected_serie</code>: The forecasted serie;</li>
 <li>
-<code>synthetic_units</code>/<code>w.weights</code>: <span class="math display">…</span>.</li>
+<code>synthetic_units</code>/<code>w.weights</code>: the units (from <code>18</code> to <code>1</code>) selected and their recpective weights.</li>
 </ul>
 </div>
-<div id="table-2-variable_importance_and_comparison" class="section level3">
-<h3 class="hasAnchor">
+<div id="table-2-variable_importance_and_comparison" class="section level4">
+<h4 class="hasAnchor">
 <a href="#table-2-variable_importance_and_comparison" class="anchor"></a>Table 2: <code>variable_importance_and_comparison</code>
-</h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+</h4>
+<p>This table summarizes the results related to the features/variables selection from the Synthetic Control method. The columns are the following:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">kable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">synthetic_forecast</span><span class="op">$</span><span class="va">variable_importance_and_comparison</span>,<span class="fl">8</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
@@ -506,7 +604,7 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="left">x1</td>
 <td align="left">x8</td>
@@ -516,7 +614,7 @@
 <td align="right">0.129</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="left">x1</td>
 <td align="left">x20</td>
@@ -526,7 +624,7 @@
 <td align="right">0.128</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="left">x1</td>
 <td align="left">x7</td>
@@ -536,7 +634,7 @@
 <td align="right">0.123</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="left">x1</td>
 <td align="left">x16</td>
@@ -546,7 +644,7 @@
 <td align="right">0.080</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="left">x1</td>
 <td align="left">x13</td>
@@ -556,7 +654,7 @@
 <td align="right">0.062</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="left">x1</td>
 <td align="left">x9</td>
@@ -566,7 +664,7 @@
 <td align="right">0.058</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="left">x1</td>
 <td align="left">x25</td>
@@ -576,7 +674,7 @@
 <td align="right">0.045</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="left">x1</td>
 <td align="left">x24</td>
@@ -589,36 +687,29 @@
 </table>
 <ul>
 <li>
-<code>execution_date</code>: <span class="math display">…</span>
-</li>
+<code>execution_date</code>: The date that the forecast was executed in the YYYY-MM-DD format;</li>
 <li>
-<code>projected_unit</code>: <span class="math display">…</span>
-</li>
+<code>projected_unit</code>: The forcasted unit;</li>
 <li>
-<code>projected_serie</code>: <span class="math display">…</span>
-</li>
+<code>projected_serie</code>: The forecasted serie;</li>
 <li>
-<code>variable</code>: <span class="math display">…</span>
-</li>
+<code>variable</code>: The variable selected;</li>
 <li>
-<code>unit_of_interest</code>: <span class="math display">…</span>
-</li>
+<code>unit_of_interest</code>: The mean value over time of the variable in column <code>variable</code> from the unit in the <code>projected_unit</code>;</li>
 <li>
-<code>synthetic</code>: <span class="math display">…</span>
-</li>
+<code>synthetic</code>: The mean value over time of the variable in column <code>variable</code> of the syntehtic unit;</li>
 <li>
-<code>sample</code>: <span class="math display">…</span>
-</li>
+<code>sample</code>: The mean value over time of the variable in column <code>variable</code> of the whole dataset;</li>
 <li>
-<code>v.weights</code>: <span class="math display">…</span>
-</li>
+<code>v.weights</code>: The weight of the variable in the column <code>variable</code>.</li>
 </ul>
 </div>
-<div id="table-3-mape_backtest" class="section level3">
-<h3 class="hasAnchor">
+<div id="table-3-mape_backtest" class="section level4">
+<h4 class="hasAnchor">
 <a href="#table-3-mape_backtest" class="anchor"></a>Table 3: <code>mape_backtest</code>
-</h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+</h4>
+<p>This table depicts the results of a simple mape back test on the period it was used to forecast. It is worth noting that the intention is not to provide a robust method for validation the model. The Synthetic Control Method is a mathematical approach, not an machine learning, that minimizes the distance without worrying about overfitting the curves. The columns are the following:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">kable</span><span class="op">(</span><span class="va">synthetic_forecast</span><span class="op">$</span><span class="va">mape_backtest</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
@@ -642,7 +733,7 @@
 <th align="right">mape</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="left">x1</td>
 <td align="right">21</td>
@@ -654,27 +745,27 @@
 </table>
 <ul>
 <li>
-<code>execution_date</code>: <span class="math display">…</span>
-</li>
+<code>execution_date</code>: The date that the forecast was executed in the YYYY-MM-DD format;</li>
 <li>
-<code>projected_unit</code>: <span class="math display">…</span>
-</li>
+<code>projected_unit</code>: The forcasted unit;</li>
 <li>
-<code>projected_serie</code>: <span class="math display">…</span>
-</li>
+<code>projected_serie</code>: The forecasted serie;</li>
 <li>
-<code>max_time_unit_of_interest</code>: <span class="math display">…</span>
-</li>
+<code>max_time_unit_of_interest</code>: The age of the unit of interest;</li>
 <li>
-<code>periods_to_forecast</code>: <span class="math display">…</span> <code>elegible_control_units</code>: <span class="math display">…</span> <code>mape</code>: <span class="math display">…</span>
-</li>
+<code>periods_to_forecast</code>: Periods that were forecasted;</li>
+<li>
+<code>elegible_control_units</code>: Number of elegible units to be used to forecast;</li>
+<li>
+<code>mape</code>: The mean absolute percentage error in the from 1 to <code>max_time_unit_of_interest</code>.</li>
 </ul>
 </div>
-<div id="table-4-output_projecao" class="section level3">
-<h3 class="hasAnchor">
+<div id="table-4-output_projecao" class="section level4">
+<h4 class="hasAnchor">
 <a href="#table-4-output_projecao" class="anchor"></a>Table 4: <code>output_projecao</code>
-</h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+</h4>
+<p>This tables contains the projection itself. The columns are the following:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">kable</span><span class="op">(</span><span class="va">synthetic_forecast</span><span class="op">$</span><span class="va">output_projecao</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
@@ -695,7 +786,7 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">1</td>
 <td align="right">0.4354680</td>
@@ -703,7 +794,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">2</td>
 <td align="right">0.4321821</td>
@@ -711,7 +802,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">3</td>
 <td align="right">0.5256354</td>
@@ -719,7 +810,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">4</td>
 <td align="right">0.4840789</td>
@@ -727,7 +818,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">5</td>
 <td align="right">0.3801790</td>
@@ -735,7 +826,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">6</td>
 <td align="right">0.2640425</td>
@@ -743,7 +834,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">7</td>
 <td align="right">0.1495329</td>
@@ -751,7 +842,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">8</td>
 <td align="right">0.2581808</td>
@@ -759,7 +850,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">9</td>
 <td align="right">0.2937315</td>
@@ -767,7 +858,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">10</td>
 <td align="right">0.3000216</td>
@@ -775,7 +866,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">11</td>
 <td align="right">0.3381660</td>
@@ -783,7 +874,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">12</td>
 <td align="right">0.3035805</td>
@@ -791,7 +882,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">13</td>
 <td align="right">0.2989308</td>
@@ -799,7 +890,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">14</td>
 <td align="right">0.6051545</td>
@@ -807,7 +898,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">15</td>
 <td align="right">0.3462337</td>
@@ -815,7 +906,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">16</td>
 <td align="right">0.3895760</td>
@@ -823,7 +914,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">17</td>
 <td align="right">0.4199159</td>
@@ -831,7 +922,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">18</td>
 <td align="right">0.4777851</td>
@@ -839,7 +930,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">19</td>
 <td align="right">0.5354843</td>
@@ -847,7 +938,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">20</td>
 <td align="right">0.4860005</td>
@@ -855,7 +946,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">21</td>
 <td align="right">0.4963447</td>
@@ -863,7 +954,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">22</td>
 <td align="right">0.4928737</td>
@@ -871,7 +962,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">23</td>
 <td align="right">0.4534551</td>
@@ -879,7 +970,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">24</td>
 <td align="right">0.4750725</td>
@@ -887,7 +978,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">25</td>
 <td align="right">0.4928884</td>
@@ -895,7 +986,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">26</td>
 <td align="right">0.7005200</td>
@@ -903,7 +994,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">27</td>
 <td align="right">0.3911140</td>
@@ -911,7 +1002,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">28</td>
 <td align="right">0.4438282</td>
@@ -919,7 +1010,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">29</td>
 <td align="right">0.4673172</td>
@@ -927,7 +1018,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">30</td>
 <td align="right">0.4722184</td>
@@ -935,7 +1026,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">31</td>
 <td align="right">0.4898868</td>
@@ -943,7 +1034,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="even">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">32</td>
 <td align="right">0.5014260</td>
@@ -951,7 +1042,7 @@
 <td align="left">x1</td>
 </tr>
 <tr class="odd">
-<td align="left">2021-06-08</td>
+<td align="left">2021-06-09</td>
 <td align="left">30</td>
 <td align="right">33</td>
 <td align="right">0.4313357</td>
@@ -962,24 +1053,19 @@
 </table>
 <ul>
 <li>
-<code>execution_date</code>: <span class="math display">…</span>
-</li>
+<code>execution_date</code>: The date that the forecast was executed in the YYYY-MM-DD format;</li>
 <li>
-<code>projected_unit</code>: <span class="math display">…</span>
-</li>
+<code>projected_unit</code>: The forcasted unit;</li>
 <li>
-<code>time_period</code>: <span class="math display">…</span>
-</li>
+<code>time_period</code>: The time period;</li>
 <li>
-<code>projected_serie</code>: <span class="math display">…</span>
-</li>
+<code>projected_serie</code>: The forecasted serie;</li>
 <li>
-<code>projected_serie_value</code>: <span class="math display">…</span>
-</li>
+<code>projected_serie_value</code>: The value of the seria/variable that was projected, from colun <code>projected_serie</code>;</li>
 <li>
-<code>is_projected</code>: <span class="math display">…</span>
-</li>
+<code>is_projected</code>: 1 indicates that the value is projected, 0 indicates that the value is observed.</li>
 </ul>
+</div>
 </div>
 </div>
 </div>
@@ -1004,6 +1090,7 @@
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://codecov.io/gh/viniciusmsousa/SynthCast?branch=main"><img src="https://codecov.io/gh/viniciusmsousa/SynthCast/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
 </div>

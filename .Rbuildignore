@@ -12,3 +12,5 @@
 ^README\.md$
 ^NEWS\.md$
 ^\.github$
+^CRAN-RELEASE$
+^codecov\.yml$
