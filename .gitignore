@@ -4,3 +4,4 @@ renv/
 .Rproj.user/
 core*
 _pkgdown.yml
+CRAN-RELEASE
