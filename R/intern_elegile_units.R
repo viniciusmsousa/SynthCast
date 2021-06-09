@@ -1,5 +1,7 @@
 #' intern_elegile_units
 #'
+#' Internal function. Please refer to run_synthetic_forecast documentation.
+#'
 #' Selects the elegible units to build the synthetic control: Rule the elegible units are the units that
 #' have at least max_time_unit_of_interest + periods_to_forecast time periods.
 #'
@@ -10,19 +12,8 @@
 #' @param periods_to_forecast (Integer) Number of periods to forecast.
 #'
 #' @return DataFrame with the columns: (i) col_unit_name and (ii) manter (bool)
-#' @export
 #'
 #' @import dplyr
-#'
-#' @examples
-#' \donttest{
-#' elegible <- intern_elegile_units(
-#' df = df_example,
-#' col_time = 'time_period',
-#' max_time_unit_of_interest = 20,
-#' periods_to_forecast = 30
-#' )
-#' }
 intern_elegile_units <- function(
   df, col_unit_name, col_time, max_time_unit_of_interest, periods_to_forecast
 ){

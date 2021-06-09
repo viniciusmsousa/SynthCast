@@ -1,5 +1,7 @@
 #' compute_result_tables
 #'
+#' Internal function. Please refer to run_synthetic_forecast documentation.
+#'
 #' @param df Main DataFrame.
 #' @param synthetic_control_output Output from compute_synthetic_control().
 #' @param col_unit_name String with column name of the column with the units names.
@@ -12,22 +14,6 @@
 #' @return List with result tables.
 #'
 #' @import dplyr tidyr Synth utils
-#'
-#' @export
-#'
-#' @examples
-#' \donttest{
-#' compute_result_tables(
-#' df = df_example,
-#' synthetic_control_output = compute_synthetic_control(...),
-#' col_unit_name = "col_unit",
-#' unit_of_interest = 3,
-#' serie_of_interest = "col_serie",
-#' max_time_unit_of_interest = 21,
-#' periods_to_forecast = 6,
-#' col_time = "col_time"
-#' )
-#' }
 #'
 compute_result_tables <- function(
   df, synthetic_control_output, col_unit_name, unit_of_interest,
