@@ -24,15 +24,8 @@ intern_get_max_time_unit_of_interest(
 Same type as col_time, max value.
 }
 \description{
+Internal function. Please refer to run_synthetic_forecast documentation.
+}
+\details{
 Intern function to compute the max time period of the unit of interest.
-}
-\examples{
-\donttest{
-max_time_unit <- intern_get_max_time_unit_of_interest(
-  df = df_example,
-  col_unit_name = 'unit',
-  unit_of_interest = 30,
-  col_time = 'time_period'
-)
-}
 }

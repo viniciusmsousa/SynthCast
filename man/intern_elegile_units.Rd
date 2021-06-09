@@ -27,16 +27,9 @@ intern_elegile_units(
 DataFrame with the columns: (i) col_unit_name and (ii) manter (bool)
 }
 \description{
+Internal function. Please refer to run_synthetic_forecast documentation.
+}
+\details{
 Selects the elegible units to build the synthetic control: Rule the elegible units are the units that
 have at least max_time_unit_of_interest + periods_to_forecast time periods.
-}
-\examples{
-\donttest{
-elegible <- intern_elegile_units(
-df = df_example,
-col_time = 'time_period',
-max_time_unit_of_interest = 20,
-periods_to_forecast = 30
-)
-}
 }
