@@ -145,8 +145,8 @@ be used to forecast the younger units. For example, the data from units
 to check the [Synthetic Control Synth Package
 paper](https://www.jstatsoft.org/article/view/v042i13).).
 
-The function call bellow runs a synthetic forecast of 12 time periods of
-the series `x1` of the unit 30.
+The function call bellow runs a synthetic forecast of `12` time periods
+of the series `x1` of the unit 30.
 
 ``` r
 synthetic_forecast <- run_synthetic_forecast(

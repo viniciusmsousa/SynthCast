@@ -446,7 +446,7 @@
 </tbody>
 </table>
 <p>As one can see the older unit (the smaller the number the older the unit is) the longer is the time series that are available (larger values in the <code>time_period</code> column). This means that the data from older units can be used to forecast the younger units. For example, the data from units <code>18</code> to <code>1</code> could be used to predict the next <code>12</code> periods of the unit <code>30</code>. This is excatly what the function <code><a href="reference/run_synthetic_forecast.html">run_synthetic_forecast()</a></code> does (To better understand how it is working under the hood it is recommend to check the <a href="https://www.jstatsoft.org/article/view/v042i13">Synthetic Control Synth Package paper</a>.).</p>
-<p>The function call bellow runs a synthetic forecast of 12 time periods of the series <code>x1</code> of the unit 30.</p>
+<p>The function call bellow runs a synthetic forecast of <code>12</code> time periods of the series <code>x1</code> of the unit 30.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">synthetic_forecast</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/run_synthetic_forecast.html">run_synthetic_forecast</a></span><span class="op">(</span>
   df <span class="op">=</span> <span class="va">df_example</span>,

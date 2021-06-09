@@ -85,7 +85,7 @@ df_example %>%
 ```
 As one can see the older unit (the smaller the number the older the unit is) the longer is the time series that are available (larger values in the `time_period` column). This means that the data from older units can be used to forecast the younger units. For example, the data from units ``r 30-12`` to `1` could be used to predict the next `12` periods of the unit `30`. This is excatly what the function `run_synthetic_forecast()` does (To better understand how it is working under the hood it is recommend to check the [Synthetic Control Synth Package paper](https://www.jstatsoft.org/article/view/v042i13).).
 
-The function call bellow runs a synthetic forecast of 12 time periods of the series `x1` of the unit 30.
+The function call bellow runs a synthetic forecast of `12` time periods of the series `x1` of the unit 30.
 ```{r run_synthetic_forecast function call, message=F}
 synthetic_forecast <- run_synthetic_forecast(
   df = df_example,
