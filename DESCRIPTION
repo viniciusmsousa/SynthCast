@@ -1,6 +1,6 @@
 Package: SynthCast
 Type: Package
-Title: Use Synthetic Control Method to Forecast Series
+Title: Synthetic Control Method to Forecast Series
 Version: 0.2.0
 Authors@R: 
     c(person(given = "Vinicius",
