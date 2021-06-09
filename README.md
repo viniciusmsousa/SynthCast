@@ -50,10 +50,7 @@ a synthetic combination that represents the unit of interest based on a
 series of numerical features. The following section goes through ans
 usage example of the package.
 
-## Usage
-
-An unit can be represented as … and their behavior is assumed to be the
-same.
+## SynthCast Usage
 
 ### Instalation
 
@@ -71,9 +68,16 @@ devtools::install_github(
 )
 ```
 
-## Example
+### Example
 
-lets forecast the next 12 periods for the unit 30.
+This section is a walk through of how the package was inted to be used
+with a pratical example.
+
+#### The Dataset
+
+The first thing that a forecast needs a data to be forecasted. The
+SynthCast provides a example of how it expected a dataset to look like,
+the code bellow loads the package and the example dataset:
 
 ``` r
 library(SynthCast)
@@ -90,7 +94,56 @@ kable(head(df_example))
 |    1 |            5 | 0.4223203 | 0.1391912 | 0.4767905 | 0.5474351 | 0.5673960 | 0.5 | 0.0501235 | 0.4999604 | 0.3522328 | 0.1638796 | 0.0279551 | 0.3139178 | 0.0689121 | 0.2787148 | 0.0835851 | 0.1119981 | 0.6177005 | 0.5 | 0.6149068 | 0.5627327 | 0.7247700 | 0.5 | 0.7834395 | 0.5979929 | 0.2351954 | 0.5 | 0.0072638 | 0.5979929 |
 |    1 |            6 | 0.3827364 | 0.1078405 | 0.5021293 | 0.5456524 | 0.6992290 | 0.5 | 0.0688889 | 0.6161397 | 0.4334900 | 0.3311037 | 0.0335161 | 0.3829171 | 0.0602702 | 0.2787148 | 0.0835851 | 0.0985164 | 0.7600335 | 0.5 | 0.7826087 | 0.6957559 | 0.9102858 | 0.5 | 0.9745223 | 0.7413431 | 0.2458748 | 0.5 | 0.0072638 | 0.7413431 |
 
-Main function is
+The dataset is expected to have 3 types of columns:
+
+-   1.  *A unit column*: containing a numeric identification of the
+        unit. In the credit card example this could the the customer, a
+        group of customer, etc.,;
+
+-   2.  *A time columns*: containing the time in integer. In the credit
+        card example this would be the age in months of the respective
+        unit (say 1 for first month, 2 for the second month, etc.,);
+
+-   3.  *Feature Columns*: Numeric features, with both the serie(s) that
+        will be forecasted as well as features to use to forecast. In
+        the credit card this could be the profitability and
+        transactional features.
+
+The table bellow shows the max time for each unit:
+
+``` r
+library(dplyr)
+
+df_example %>%
+  group_by(unit) %>%
+  summarise(max_time_period=max(time_period)) %>%
+  filter(unit %in% c(1, 2, 3, 4, 5, 45, 46, 47, 48, 49, 50)) %>% 
+  kable()
+```
+
+| unit | max\_time\_period |
+|-----:|------------------:|
+|    1 |                50 |
+|    2 |                49 |
+|    3 |                48 |
+|    4 |                47 |
+|    5 |                46 |
+|   45 |                 6 |
+|   46 |                 5 |
+|   47 |                 4 |
+|   48 |                 3 |
+|   49 |                 2 |
+|   50 |                 1 |
+
+As one can see the older unit (the smaller the number the older the unit
+is) the longer is the time series that are available (larger values in
+the `time_period` column). This means that the data from older units can
+be used to forecast the younger units. For example, the data from units
+`17` to `1` could be used to predict the next `12` periods of the unit
+`30`. This is excatly what the function `run_synthetic_forecast()` does
+(To better understand how it is working under the hood it is recommend
+to check the [Synthetic Control Synth Package
+paper](https://www.jstatsoft.org/article/view/v042i13).).
 
 ``` r
 synthetic_forecast <- run_synthetic_forecast(
@@ -123,7 +176,7 @@ synthetic_forecast <- run_synthetic_forecast(
 #>  1.1452e-05 0.0002666085 0.0001873182 0.0002686277 0.0001636778 0.0003347625 0.0004905744 0.0005939929 0.0005203545 0.5502766 4.8739e-06 0.0007708196 0.0003844661 0.001002508 0.000803214 0.000999687 0.1285913 0.3143298
 ```
 
-The output object is composed of 4 tables.
+The output of the function is a list with 4 tables.
 
 ### Table 1: `synthetic_control_composition`
 

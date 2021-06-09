@@ -35,9 +35,7 @@ In this scenario, the units are the clients (or group of clients), the journey i
 
 In order to do so, the SynthCast uses the [Synthetic Control](https://www.jstatsoft.org/article/view/v042i13) Method to find a synthetic combination that represents the unit of interest based on a series of numerical features. The following section goes through ans usage example of the package.
 
-## Usage
-
-An unit can be represented as ... and their behavior is assumed to be the same.
+## SynthCast Usage
 
 ### Instalation
 
@@ -48,24 +46,45 @@ install.packages("SynthCast")
 ```
 
 As well as from github:
+
 ```{r install from github command, eval=F}
 devtools::install_github(
     "viniciusmsousa/SynthCast",ref="main"
 )
 ```
 
+### Example
 
-## Example
+This section is a walk through of how the package was inted to be used with a pratical example.
 
-lets forecast the next 12 periods for the unit 30.
+#### The Dataset
 
-```{r}
+The first thing that a forecast needs a data to be forecasted. The SynthCast provides a example of how it expected a dataset to look like, the code bellow loads the package and the example dataset:
+
+```{r load SynthCast and df_example}
 library(SynthCast)
 data('df_example')
 kable(head(df_example)) 
 ```
 
-Main function is
+The dataset is expected to have 3 types of columns:
+
+- 1) *A unit column*: containing a numeric identification of the unit. In the credit card example this could the the customer, a group of customer, etc.,;
+- 2) *A time columns*: containing the time in integer. In the credit card example this would be the age in months of the respective unit (say 1 for first month, 2 for the second month, etc.,);
+- 3) *Feature Columns*: Numeric features, with both the serie(s) that will be forecasted as well as features to use to forecast. In the credit card this could be the profitability and transactional features.
+
+The table bellow shows the max time for each unit:
+```{r table max time each unit, message=FALSE}
+library(dplyr)
+
+df_example %>%
+  group_by(unit) %>%
+  summarise(max_time_period=max(time_period)) %>%
+  filter(unit %in% c(1, 2, 3, 4, 5, 45, 46, 47, 48, 49, 50)) %>% 
+  kable()
+```
+As one can see the older unit (the smaller the number the older the unit is) the longer is the time series that are available (larger values in the `time_period` column). This means that the data from older units can be used to forecast the younger units. For example, the data from units ``r 29-12`` to `1` could be used to predict the next `12` periods of the unit `30`. This is excatly what the function `run_synthetic_forecast()` does (To better understand how it is working under the hood it is recommend to check the [Synthetic Control Synth Package paper](https://www.jstatsoft.org/article/view/v042i13).).
+
 
 ```{r, message=F}
 synthetic_forecast <- run_synthetic_forecast(
@@ -78,7 +97,7 @@ synthetic_forecast <- run_synthetic_forecast(
 )
 ```
 
-The output object is composed of 4 tables.
+The output of the function is a list with 4 tables.
 
 ### Table 1: `synthetic_control_composition`
 
