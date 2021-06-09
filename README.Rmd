@@ -41,12 +41,19 @@ An unit can be represented as ... and their behavior is assumed to be the same.
 
 ### Instalation
 
-```{r, eval=F}
-install.packages("devtools") 
+The package can be installed either from CRAN:
+
+```{r install from cran command, eval=FALSE}
+install.packages("SynthCast")
+```
+
+As well as from github:
+```{r install from github command, eval=F}
 devtools::install_github(
     "viniciusmsousa/SynthCast",ref="main"
 )
 ```
+
 
 ## Example
 
