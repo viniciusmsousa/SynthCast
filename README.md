@@ -139,11 +139,14 @@ As one can see the older unit (the smaller the number the older the unit
 is) the longer is the time series that are available (larger values in
 the `time_period` column). This means that the data from older units can
 be used to forecast the younger units. For example, the data from units
-`17` to `1` could be used to predict the next `12` periods of the unit
+`18` to `1` could be used to predict the next `12` periods of the unit
 `30`. This is excatly what the function `run_synthetic_forecast()` does
 (To better understand how it is working under the hood it is recommend
 to check the [Synthetic Control Synth Package
 paper](https://www.jstatsoft.org/article/view/v042i13).).
+
+The function call bellow runs a synthetic forecast of 12 time periods of
+the series `x1` of the unit 30.
 
 ``` r
 synthetic_forecast <- run_synthetic_forecast(
@@ -178,7 +181,14 @@ synthetic_forecast <- run_synthetic_forecast(
 
 The output of the function is a list with 4 tables.
 
-### Table 1: `synthetic_control_composition`
+### Synthetic Forecat Results
+
+These are the 4 tables that are returned by the function call.
+
+#### Table 1: `synthetic_control_composition`
+
+This table summarizes the results related to the unit selection from the
+Synthetic Control method. The columns are the following:
 
 ``` r
 kable(synthetic_forecast$synthetic_control_composition)
@@ -196,12 +206,18 @@ kable(synthetic_forecast$synthetic_control_composition)
 | 2021-06-09      | 30              | x1               | 15               |     0.001 |
 | 2021-06-09      | 30              | x1               | 16               |     0.001 |
 
--   `execution_date`: \[…\]
--   `projected_unit`: \[…\]
--   `projected_serie`: \[…\]
--   `synthetic_units`/`w.weights`: \[…\].
+-   `execution_date`: The date that the forecast was executed in the
+    YYYY-MM-DD format;
+-   `projected_unit`: The forcasted unit;
+-   `projected_serie`: The forecasted serie;
+-   `synthetic_units`/`w.weights`: the units (from `18` to `1`) selected
+    and their recpective weights.
 
 ### Table 2: `variable_importance_and_comparison`
+
+This table summarizes the results related to the features/variables
+selection from the Synthetic Control method. The columns are the
+following:
 
 ``` r
 kable(head(synthetic_forecast$variable_importance_and_comparison,8))
@@ -218,16 +234,27 @@ kable(head(synthetic_forecast$variable_importance_and_comparison,8))
 | 2021-06-09      | 30              | x1               | x25      |              0.517 |     0.370 |  0.317 |     0.045 |
 | 2021-06-09      | 30              | x1               | x24      |              0.729 |     0.709 |  0.699 |     0.044 |
 
--   `execution_date`: \[…\]
--   `projected_unit`: \[…\]
--   `projected_serie`: \[…\]
--   `variable`: \[…\]
--   `unit_of_interest`: \[…\]
--   `synthetic`: \[…\]
--   `sample`: \[…\]
--   `v.weights`: \[…\]
+-   `execution_date`: The date that the forecast was executed in the
+    YYYY-MM-DD format;
+-   `projected_unit`: The forcasted unit;
+-   `projected_serie`: The forecasted serie;
+-   `variable`: The variable selected;
+-   `unit_of_interest`: The mean value over time of the variable in
+    column `variable` from the unit in the `projected_unit`;
+-   `synthetic`: The mean value over time of the variable in column
+    `variable` of the syntehtic unit;
+-   `sample`: The mean value over time of the variable in column
+    `variable` of the whole dataset;
+-   `v.weights`: The weight of the variable in the column `variable`.
 
 ### Table 3: `mape_backtest`
+
+This table depicts the results of a simple mape back test on the period
+it was used to forecast. It is worth noting that the intention is not to
+provide a robust method for validation the model. The Synthetic Control
+Method is a mathematical approach, not an machine learning, that
+minimizes the distance without worrying about overfitting the curves.
+The columns are the following:
 
 ``` r
 kable(synthetic_forecast$mape_backtest)
@@ -237,14 +264,21 @@ kable(synthetic_forecast$mape_backtest)
 |:----------------|:----------------|:-----------------|------------------------------:|----------------------:|-------------------------:|-----------------------:|---------:|
 | 2021-06-09      | 30              | x1               |                            21 |                    12 |                       17 |                      9 | 13.00928 |
 
--   `execution_date`: \[…\]
--   `projected_unit`: \[…\]
--   `projected_serie`: \[…\]
--   `max_time_unit_of_interest`: \[…\]
--   `periods_to_forecast`: \[…\] `elegible_control_units`: \[…\] `mape`:
-    \[…\]
+-   `execution_date`: The date that the forecast was executed in the
+    YYYY-MM-DD format;
+-   `projected_unit`: The forcasted unit;
+-   `projected_serie`: The forecasted serie;
+-   `max_time_unit_of_interest`: The age of the unit of interest;
+-   `periods_to_forecast`: Periods that were forecasted;
+-   `elegible_control_units`: Number of elegible units to be used to
+    forecast;
+-   `mape`: The mean absolute percentage error in the from 1 to
+    `max_time_unit_of_interest`.
 
 ### Table 4: `output_projecao`
+
+This tables contains the projection itself. The columns are the
+following:
 
 ``` r
 kable(synthetic_forecast$output_projecao)
@@ -286,9 +320,12 @@ kable(synthetic_forecast$output_projecao)
 | 2021-06-09      | 30              |           32 |               0.5014260 |             1 | x1               |
 | 2021-06-09      | 30              |           33 |               0.4313357 |             1 | x1               |
 
--   `execution_date`: \[…\]
--   `projected_unit`: \[…\]
--   `time_period`: \[…\]
--   `projected_serie`: \[…\]
--   `projected_serie_value`: \[…\]
--   `is_projected`: \[…\]
+-   `execution_date`: The date that the forecast was executed in the
+    YYYY-MM-DD format;
+-   `projected_unit`: The forcasted unit;
+-   `time_period`: The time period;
+-   `projected_serie`: The forecasted serie;
+-   `projected_serie_value`: The value of the seria/variable that was
+    projected, from colun `projected_serie`;
+-   `is_projected`: 1 indicates that the value is projected, 0 indicates
+    that the value is observed.
