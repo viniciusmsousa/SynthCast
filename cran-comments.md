@@ -1,8 +1,6 @@
 ## Resubmission
 This is a resubmission. In this version I have:
-* Omitted redundant phrase from Description field in the DESCRIPTION file;
-* Added paper reference in the Description field in the DESCRIPTION file;
-* Added URL field in the DESCRIPTION file.
+* Added the "doi" prefix in the Description field in DESCRIPTION file.
 
 ## Test environments
 * local R installation (macos BigSur), R 4.1.0

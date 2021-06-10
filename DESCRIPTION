@@ -10,7 +10,7 @@ Authors@R:
 Maintainer: Vinicius Sousa <vinisousa04@gmail.com>
 Description: Uses the Synth Package to make forecasts on panel data.
     Check the package site to have an example and for more information
-    on the Synth Package see Abadie et al. (2011) <10.18637/jss.v042.i13>.
+    on the Synth Package see Abadie et al. (2011) <doi:10.18637/jss.v042.i13>.
 License: GPL (>= 3)
 URL: https://viniciusmsousa.github.io/SynthCast/
 Encoding: UTF-8
