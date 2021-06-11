@@ -8,8 +8,8 @@ Authors@R:
              role = c("aut", "cph", "cre"),
              email = "vinisousa04@gmail.com"))
 Maintainer: Vinicius Sousa <vinisousa04@gmail.com>
-Description: This package does not implement a new method.
-    It makes usage of the Synthetic Control Method, see Abadie et al. (2011) <doi:10.18637/jss.v042.i13>,
+Description: Not a new method implementation.
+    Usage of the Synthetic Control Method, see Abadie et al. (2011) <doi:10.18637/jss.v042.i13>,
     as an ad-hoc approach to forecast series with panel in a specific context. The context being: There are units in different stages of a certain journey, there the assumption that the units’ behavior throw out the journey are similar is valid and there are not enough data to use traditional forecasting methods. 
     For a usage example see the package home page documentation.
 License: GPL (>= 3)
