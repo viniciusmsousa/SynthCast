@@ -35,6 +35,7 @@ synthetic_control = compute_synthetic_control(
 
 # Tests -------------------------------------------------------------------
 
+
 test_that(
   desc = "Tests intern_get_max_time_unit_of_interest()",
   code = {
