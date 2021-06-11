@@ -32,6 +32,16 @@ synthetic_control = compute_synthetic_control(
   max_time_unit_of_interest = max_time_unit
 )
 
+result_tables <- compute_result_tables(
+  df = df_example,
+  synthetic_control_output = synthetic_control,
+  col_unit_name = 'unit',
+  unit_of_interest = 30,
+  serie_of_interest = 'x1',
+  max_time_unit_of_interest = max_time_unit,
+  periods_to_forecast = 12,
+  col_time = 'time_period'
+)
 
 # Tests -------------------------------------------------------------------
 
@@ -113,6 +123,29 @@ test_that(
       expected = c("dataprep_out", "synth_out")
     )
   }
+)
+
+test_that(
+   desc = 'Tests compute_result_tables()',
+   code = {
+     expect_equal(
+       object = class(result_tables),
+       expected = 'list'
+     )
+
+     expect_equal(
+       object = length(result_tables),
+       expected = 4
+     )
+
+     expect_equal(
+       object = names(result_tables),
+       expected = c('synthetic_control_composition',
+                    'variable_importance_and_comparison',
+                    'mape_backtest',
+                    'output_projecao')
+     )
+   }
 )
 
 test_that(
