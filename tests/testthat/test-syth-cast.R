@@ -43,6 +43,16 @@ result_tables <- compute_result_tables(
   col_time = 'time_period'
 )
 
+synthetic_forecast <- run_synthetic_forecast(
+  df = df_example,
+  col_unit_name = 'unit',
+  serie_of_interest = 'x1',
+  unit_of_interest = 30,
+  col_time = "time_period",
+  periods_to_forecast = 12
+)
+
+
 # Tests -------------------------------------------------------------------
 
 test_that(
@@ -193,6 +203,29 @@ test_that(
         periods_to_forecast = "period_non_numeric"
       ),
       class = "simpleError"
+    )
+  }
+)
+
+test_that(
+  desc = 'Tests run_synthetic_forecast()',
+  code = {
+    expect_equal(
+      object = class(synthetic_forecast),
+      expected = 'list'
+    )
+
+    expect_equal(
+      object = length(synthetic_forecast),
+      expected = 4
+    )
+
+    expect_equal(
+      object = names(synthetic_forecast),
+      expected = c('synthetic_control_composition',
+                   'variable_importance_and_comparison',
+                   'mape_backtest',
+                   'output_projecao')
     )
   }
 )
