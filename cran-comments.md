@@ -1,6 +1,6 @@
 ## Resubmission
 This is a resubmission. In this version I have:
-* Removeed "The Package" phrase from Description field in the DESCRIPTION file;
+* Removed "The Package" phrase from Description field in the DESCRIPTION file;
 
 ## Test environments
 * local R installation (macos BigSur), R 4.1.0
