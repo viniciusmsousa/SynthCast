@@ -12,9 +12,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Synthetic Control Method to Forecast Series">
-<meta property="og:description" content="The ideia behind this package is to have an practical approach
-    when a forecast is needed to be done with panel data and there are no series long enough to use tradicional 
-    time series analysis. ">
+<meta property="og:description" content="Uses the Synth Package to make forecasts on panel data.
+    Check the package site to have an example and for more information
+    on the Synth Package see Abadie et al. (2011) &lt;doi:10.18637/jss.v042.i13&gt;.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -87,8 +87,11 @@
 <div id="instalation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#instalation" class="anchor"></a>Instalation</h3>
-<p>The package can be installed from github:</p>
+<p>The package can be installed from Cran:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"SynthCast"</span><span class="op">)</span></code></pre></div>
+<p>As well as from github:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span>
     <span class="st">"viniciusmsousa/SynthCast"</span>,ref<span class="op">=</span><span class="st">"main"</span>
 <span class="op">)</span></code></pre></div>
@@ -101,8 +104,8 @@
 <h4 class="hasAnchor">
 <a href="#the-dataset" class="anchor"></a>The Dataset</h4>
 <p>The first thing that a forecast needs a data to be forecasted. The SynthCast provides a example of how it expected a dataset to look like, the code bellow loads the package and the example dataset:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">SynthCast</span><span class="op">)</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://viniciusmsousa.github.io/SynthCast/">SynthCast</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">'df_example'</span><span class="op">)</span>
 <span class="fu">kable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">df_example</span><span class="op">)</span><span class="op">)</span> </code></pre></div>
 <table class="table">
@@ -381,7 +384,7 @@
 </ol></li>
 </ul>
 <p>The table bellow shows the max time for each unit:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 
 <span class="va">df_example</span> <span class="op">%&gt;%</span>
@@ -443,7 +446,7 @@
 </table>
 <p>As one can see the older unit (the smaller the number the older the unit is) the longer is the time series that are available (larger values in the <code>time_period</code> column). This means that the data from older units can be used to forecast the younger units. For example, the data from units <code>18</code> to <code>1</code> could be used to predict the next <code>12</code> periods of the unit <code>30</code>. This is excatly what the function <code><a href="reference/run_synthetic_forecast.html">run_synthetic_forecast()</a></code> does (To better understand how it is working under the hood it is recommend to check the <a href="https://www.jstatsoft.org/article/view/v042i13">Synthetic Control Synth Package paper</a>.).</p>
 <p>The function call bellow runs a synthetic forecast of <code>12</code> time periods of the series <code>x1</code> of the unit 30.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">synthetic_forecast</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/run_synthetic_forecast.html">run_synthetic_forecast</a></span><span class="op">(</span>
   df <span class="op">=</span> <span class="va">df_example</span>,
   col_unit_name <span class="op">=</span> <span class="st">'unit'</span>,
@@ -484,7 +487,7 @@
 <a href="#table-1-synthetic_control_composition" class="anchor"></a>Table 1: <code>synthetic_control_composition</code>
 </h4>
 <p>This table summarizes the results related to the unit selection from the Synthetic Control method. The columns are the following:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">kable</span><span class="op">(</span><span class="va">synthetic_forecast</span><span class="op">$</span><span class="va">synthetic_control_composition</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -576,7 +579,7 @@
 <a href="#table-2-variable_importance_and_comparison" class="anchor"></a>Table 2: <code>variable_importance_and_comparison</code>
 </h4>
 <p>This table summarizes the results related to the features/variables selection from the Synthetic Control method. The columns are the following:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">kable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">synthetic_forecast</span><span class="op">$</span><span class="va">variable_importance_and_comparison</span>,<span class="fl">8</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
@@ -706,7 +709,7 @@
 <a href="#table-3-mape_backtest" class="anchor"></a>Table 3: <code>mape_backtest</code>
 </h4>
 <p>This table depicts the results of a simple mape back test on the period it was used to forecast. It is worth noting that the intention is not to provide a robust method for validation the model. The Synthetic Control Method is a mathematical approach, not an machine learning, that minimizes the distance without worrying about overfitting the curves. The columns are the following:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">kable</span><span class="op">(</span><span class="va">synthetic_forecast</span><span class="op">$</span><span class="va">mape_backtest</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
@@ -762,7 +765,7 @@
 <a href="#table-4-output_projecao" class="anchor"></a>Table 4: <code>output_projecao</code>
 </h4>
 <p>This tables contains the projection itself. The columns are the following:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">kable</span><span class="op">(</span><span class="va">synthetic_forecast</span><span class="op">$</span><span class="va">output_projecao</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
@@ -1086,7 +1089,7 @@
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
 <li><a href="https://github.com/viniciusmsousa/SynthCast/actions"><img src="https://github.com/viniciusmsousa/SynthCast/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://codecov.io/gh/viniciusmsousa/SynthCast?branch=main"><img src="https://codecov.io/gh/viniciusmsousa/SynthCast/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>

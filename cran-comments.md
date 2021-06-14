@@ -1,5 +1,9 @@
+## Resubmission
+This is a resubmission. In this version I have:
+* Removed "The Package" phrase from Description field in the DESCRIPTION file;
+
 ## Test environments
-* local R installation, R 4.1.0
+* local R installation (macos BigSur), R 4.1.0
 * ubuntu 16.04 (on travis-ci), R 4.1.0
 * win-builder (devel)
 

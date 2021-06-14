@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![R-CMD-check](https://github.com/viniciusmsousa/SynthCast/workflows/R-CMD-check/badge.svg)](https://github.com/viniciusmsousa/SynthCast/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/viniciusmsousa/SynthCast/branch/main/graph/badge.svg)](https://codecov.io/gh/viniciusmsousa/SynthCast?branch=main)
@@ -56,7 +56,13 @@ usage example of the package.
 
 ### Instalation
 
-The package can be installed from github:
+The package can be installed from Cran:
+
+``` r
+install.packages("SynthCast")
+```
+
+As well as from github:
 
 ``` r
 devtools::install_github(
