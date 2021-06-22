@@ -56,4 +56,4 @@ devtools::install_github(
 
 ### Synthetic Forecast Example
 
-For a full example of how to run a synthetic forecast check the `articles` section in the [SynthCast Homepage](https://viniciusmsousa.github.io/SynthCast/).
+For a full example of how to run a synthetic forecast check the article [How to Run a Synthetic Forecast](https://viniciusmsousa.github.io/SynthCast/articles/how-to-run-synthetic-forecast.html). And fell free to contribute or contact me :)
