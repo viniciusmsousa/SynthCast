@@ -52,8 +52,7 @@ clients would be in their 24/36 months.
 In order to do so, the SynthCast uses the [Synthetic
 Control](https://www.jstatsoft.org/article/view/v042i13) Method to find
 a synthetic combination that represents the unit of interest based on a
-series of numerical features. The following section goes through ans
-usage example of the package.
+series of numerical features.
 
 ## SynthCast Usage
 

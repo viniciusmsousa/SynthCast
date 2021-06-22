@@ -35,7 +35,7 @@ Take the credit card business for example. The profit from credit card products 
 
 In this scenario, the units are the clients (or group of clients), the journey is the profitability of a credit card product and there is no reason to believe that the profitability over time of a new client would have a different shape of the options above (of course it will not be identical). Now, imagine that the product is relatively new, around 2\~3 years. This means that the older profitability series is around 24/36 months. But the majority of series would be smaller. There is not enough data to use time series algorithms with ease. So, the idea is to use the older clients, that are in their 24/36 months, to predict how the newer clients would be in their 24/36 months.
 
-In order to do so, the SynthCast uses the [Synthetic Control](https://www.jstatsoft.org/article/view/v042i13) Method to find a synthetic combination that represents the unit of interest based on a series of numerical features. The following section goes through ans usage example of the package.
+In order to do so, the SynthCast uses the [Synthetic Control](https://www.jstatsoft.org/article/view/v042i13) Method to find a synthetic combination that represents the unit of interest based on a series of numerical features. 
 
 ## SynthCast Usage
 
