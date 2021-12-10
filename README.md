@@ -5,13 +5,14 @@
 
 <!-- badges: start -->
 
-[![CRAN
-status](https://www.r-pkg.org/badges/version/SynthCast)](https://cran.r-project.org/package=SynthCast)
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![R-CMD-check](https://github.com/viniciusmsousa/SynthCast/workflows/R-CMD-check/badge.svg)](https://github.com/viniciusmsousa/SynthCast/actions)
+[![CodeFactor](https://www.codefactor.io/repository/github/viniciusmsousa/synthcast/badge)](https://www.codefactor.io/repository/github/viniciusmsousa/synthcast)
 [![Codecov test
 coverage](https://codecov.io/gh/viniciusmsousa/SynthCast/branch/main/graph/badge.svg)](https://codecov.io/gh/viniciusmsousa/SynthCast?branch=main)
+[![R-CMD-check](https://github.com/viniciusmsousa/SynthCast/workflows/R-CMD-check/badge.svg)](https://github.com/viniciusmsousa/SynthCast/actions)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/SynthCast)](https://cran.r-project.org/package=SynthCast)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/SynthCast)](https://CRAN.R-project.org/package=SynthCast)
 <!-- badges: end -->
 
