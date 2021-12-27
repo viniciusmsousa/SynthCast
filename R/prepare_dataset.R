@@ -20,7 +20,7 @@ prepare_dataset <- function(
   out <- tryCatch(
     {
 
-      if (class(df_example[['id']])=='character'){
+      if (class(df[['id']])=='character'){
         dataset <- df %>%
           mutate(
             unit_name_id = as.integer(forcats::as_factor(!!sym(all_of(col_unit_name)))),
@@ -30,7 +30,6 @@ prepare_dataset <- function(
         dataset <- df %>%
           mutate(
             unit_name_id = !!sym(col_unit_name),
-            #unit_name_id = as.integer(forcats::as_factor(!!sym(all_of(col_unit_name)))),
             unit_name = as.character(!!sym('unit_name_id'))
           )
       }
@@ -50,7 +49,7 @@ prepare_dataset <- function(
         relocate(c(!!sym('unit_name'),!!sym('unit_name_id')))
     },
     error=function(cond){
-      print('Error in Function prepare_dataset():')
+      print('Error in Function prepare_dataset():\n')
       print(cond)
     }
   )

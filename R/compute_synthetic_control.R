@@ -72,7 +72,7 @@ compute_synthetic_control <- function(
       list(dataprep_out = dataprep_out,synth_out = synth_out)
     },
     error=function(cond){
-      print('Error in Function compute_synthetic_control():')
+      print('Error in Function compute_synthetic_control():\n')
       print(cond)
     }
   )
