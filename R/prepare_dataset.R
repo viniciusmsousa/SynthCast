@@ -19,11 +19,23 @@ prepare_dataset <- function(
 ){
   out <- tryCatch(
     {
-      dataset <- df %>%
-        mutate(
-          unit_name_id = as.integer(as_factor(!!sym(all_of(col_unit_name)))),
-          unit_name = as.character(!!sym('unit_name_id'))
-        ) %>%
+
+      if (class(df_example[['id']])=='character'){
+        dataset <- df %>%
+          mutate(
+            unit_name_id = as.integer(forcats::as_factor(!!sym(all_of(col_unit_name)))),
+            unit_name = as.character(!!sym('unit_name_id'))
+          )
+      } else {
+        dataset <- df %>%
+          mutate(
+            unit_name_id = !!sym(col_unit_name),
+            #unit_name_id = as.integer(forcats::as_factor(!!sym(all_of(col_unit_name)))),
+            unit_name = as.character(!!sym('unit_name_id'))
+          )
+      }
+
+        dataset <- dataset %>%
         filter(
           !!sym(col_time) <= max_time_unit_of_interest
         ) %>%
@@ -39,7 +51,7 @@ prepare_dataset <- function(
     },
     error=function(cond){
       print('Error in Function prepare_dataset():')
-      cond
+      print(cond)
     }
   )
   return(out)

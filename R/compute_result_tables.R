@@ -23,7 +23,7 @@ compute_result_tables <- function(
     {
       execution_date = as.character(Sys.Date())
       # 1) Synth package tables
-      synth_tables <- synth.tab(dataprep.res =   synthetic_control_output$dataprep_out,
+      synth_tables <- Synth::synth.tab(dataprep.res =   synthetic_control_output$dataprep_out,
                                 synth.res = synthetic_control_output$synth_out)
 
       # 2) Synthetic units
@@ -138,8 +138,9 @@ compute_result_tables <- function(
       tables_list
     },
     error=function(cond){
-      print('Error in Function compute_result_tables():')
-      cond
+      print('Error in Function compute_result_tables():\n')
+      print(cond)
+
     }
   )
   return(out)

@@ -53,7 +53,7 @@ compute_synthetic_control <- function(
       prepared_dataset = as.data.frame(prepared_dataset)
 
 
-      dataprep_out <- dataprep(
+      dataprep_out <- Synth::dataprep(
         foo = prepared_dataset,
         predictors = elegible_variable_cols[elegible_variable_cols!=serie_of_interest],
         predictors.op = 'mean',
@@ -67,13 +67,13 @@ compute_synthetic_control <- function(
         time.optimize.ssr = head(prepared_dataset[prepared_dataset$unit_name==as.character(unit_of_interest),],-1)[[col_time]],
         time.plot = prepared_dataset[prepared_dataset$unit_name==as.character(unit_of_interest),][[col_time]]
       )
-      synth_out = synth(data.prep.obj = dataprep_out, optimxmethod = 'L-BFGS-B',)
+      synth_out = Synth::synth(data.prep.obj = dataprep_out, optimxmethod = 'L-BFGS-B',)
 
       list(dataprep_out = dataprep_out,synth_out = synth_out)
     },
     error=function(cond){
       print('Error in Function compute_synthetic_control():')
-      cond
+      print(cond)
     }
   )
   return(out)
