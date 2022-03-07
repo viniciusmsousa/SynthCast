@@ -40,7 +40,7 @@ prepare_dataset <- function(
     },
     error=function(cond){
       print('Error in Function prepare_dataset():')
-      cond
+      print(cond)
     }
   )
   return(out)
