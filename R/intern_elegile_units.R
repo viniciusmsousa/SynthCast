@@ -30,8 +30,8 @@ intern_elegile_units <- function(
       dataset_max_time_per_unit
     },
     error = function(cond){
-      print('Error in Function intern_elegile_units():')
-      cond
+      print('Error in Function intern_elegile_units():\n')
+      print(cond)
     }
   )
   return(out)

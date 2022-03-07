@@ -21,15 +21,17 @@ compute_synthetic_control <- function(
 ){
   out <- tryCatch(
     {
+
       if(max_time_unit_of_interest<2){
         stop(paste(as.character(unit_of_interest),': has less then 2 time observation!'))
       }
 
+      print('aaa')
       # (i) Vectors of units
       units_char <- prepared_dataset %>% distinct(!!sym('unit_name')) %>% unlist()
       units_int <- prepared_dataset %>% distinct(!!sym('unit_name_id')) %>% unlist()
 
-
+      print('bbb')
       # (ii) Selecting elegible variables names (std != 0)
       elegible_variable_cols = prepared_dataset %>%
         select(-c(!!sym('unit_name'),!!sym('unit_name_id'),!!sym(col_time))) %>%
@@ -44,15 +46,19 @@ compute_synthetic_control <- function(
         select(-c(!!sym('unit_name'))) %>%
         apply(2, sd) != 0
 
+
+
+      print('ddd')
       elegible_variable_cols <- elegible_variable_cols[variable_cols]
       if(length(elegible_variable_cols)<=0){
         stop('all variables from prepared_dataset have no variance across units.')
       }
 
+      print('eee')
       # (iii) Computing the Synthetic Control
       prepared_dataset = as.data.frame(prepared_dataset)
 
-
+      print('fff')
       dataprep_out <- Synth::dataprep(
         foo = prepared_dataset,
         predictors = elegible_variable_cols[elegible_variable_cols!=serie_of_interest],
@@ -67,7 +73,8 @@ compute_synthetic_control <- function(
         time.optimize.ssr = head(prepared_dataset[prepared_dataset$unit_name==as.character(unit_of_interest),],-1)[[col_time]],
         time.plot = prepared_dataset[prepared_dataset$unit_name==as.character(unit_of_interest),][[col_time]]
       )
-      synth_out = Synth::synth(data.prep.obj = dataprep_out, optimxmethod = 'L-BFGS-B',)
+      print('ggg')
+      synth_out = Synth::synth(data.prep.obj = dataprep_out, optimxmethod = 'All')
 
       list(dataprep_out = dataprep_out,synth_out = synth_out)
     },

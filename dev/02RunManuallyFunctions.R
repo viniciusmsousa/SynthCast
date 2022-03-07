@@ -58,28 +58,29 @@ library(SynthCast)
 source('R/intern_elegile_units.R')
 source('R/intern_get_max_time_unit_of_interest.R')
 
-df_example <- read.csv('dev/export.csv') %>%
+df_example <- read.csv('dev/export (1).csv') %>%
   as_tibble() %>%
-  select(-c(periodo)) %>%
+  select(-c('taxa_ocupacao_limite')) %>%
   glimpse()
 
-id = 2536526
+id = 201811
 unit_of_interest = id
 
-max <- intern_get_max_time_unit_of_interest(df = df_example, col_unit_name = 'id', unit_of_interest = id,
+max <- intern_get_max_time_unit_of_interest(df = df_example, col_unit_name = 'safra', unit_of_interest = id,
                                             col_time = 'mob')
 
 elegible <- intern_elegile_units(df = df_example,
-                                 col_unit_name = 'id',
+                                 col_unit_name = 'safra',
                                  col_time = 'mob',
                                  max_time_unit_of_interest = max,
-                                 periods_to_forecast = 6)
+                                 periods_to_forecast = 12)
+
 
 source('R/prepare_dataset.R')
 prepared_df <- prepare_dataset(
   df = df_example,
   df_elegible_units = elegible,
-  col_unit_name = 'id',
+  col_unit_name = 'safra',
   col_time = 'mob',
   unit_of_interest = id,
   max_time_unit_of_interest = max
@@ -96,14 +97,16 @@ units_int[units_char==as.character(unit_of_interest)]
 
 
 
+
 source('R/compute_synthetic_control.R')
 intern_compute_synthetic_control_out <- compute_synthetic_control(
-  prepared_dataset = prepared_df,
+  prepared_dataset = as.data.frame(prepared_df),
   unit_of_interest = id,
   serie_of_interest = 'receita_spread',
   col_time = 'mob',
   max_time_unit_of_interest = max
 )
+
 
 
 
@@ -142,6 +145,13 @@ if(sum(duplicated(c(controls.identifier.name,treatment.identifier.name))) > 0)
 
 
   # wip ---------------------------------------------------------------------
+
+
+
+
+sum(is.na.data.frame(prepared_df))
+
+
 
 
 library(devtools)

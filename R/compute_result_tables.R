@@ -21,6 +21,7 @@ compute_result_tables <- function(
 ){
   out <- tryCatch(
     {
+      print('aaa')
       execution_date = as.character(Sys.Date())
       # 1) Synth package tables
       synth_tables <- Synth::synth.tab(dataprep.res =   synthetic_control_output$dataprep_out,
