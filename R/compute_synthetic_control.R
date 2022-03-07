@@ -73,7 +73,7 @@ compute_synthetic_control <- function(
     },
     error=function(cond){
       print('Error in Function compute_synthetic_control():')
-      cond
+      print(cond)
     }
   )
   return(out)
