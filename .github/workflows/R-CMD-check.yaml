@@ -10,14 +10,14 @@ on:
       - main
     paths-ignore:
       - '**/README.Rmd'
-      - '**/README.md'
+      - '**/*.md'
       - '**/docs/'
   pull_request:
     branches:
       - main
     paths-ignore:
       - '**/README.Rmd'
-      - '**/README.md'
+      - '**/*.md'
       - '**/docs/'
 
 name: R-CMD-check
