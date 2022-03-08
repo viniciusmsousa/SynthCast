@@ -12,6 +12,7 @@
 #' @param col_time String with the column name of the time column.
 #'
 #' @return List with result tables.
+#' @export
 #'
 #' @import dplyr tidyr Synth utils
 #'
@@ -139,7 +140,7 @@ compute_result_tables <- function(
     },
     error=function(cond){
       print('Error in Function compute_result_tables():')
-      cond
+      print(cond)
     }
   )
   return(out)

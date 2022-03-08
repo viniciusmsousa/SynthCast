@@ -11,6 +11,7 @@ stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://
 [![Codecov test
 coverage](https://codecov.io/gh/viniciusmsousa/SynthCast/branch/main/graph/badge.svg)](https://codecov.io/gh/viniciusmsousa/SynthCast?branch=main)
 [![R-CMD-check](https://github.com/viniciusmsousa/SynthCast/workflows/R-CMD-check/badge.svg)](https://github.com/viniciusmsousa/SynthCast/actions)
+[![](https://img.shields.io/badge/devel%20version-0.2.1-blue.svg)](https://github.com/viniciusmsousa/SynthCast)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/SynthCast)](https://cran.r-project.org/package=SynthCast)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/SynthCast)](https://CRAN.R-project.org/package=SynthCast)
@@ -65,7 +66,8 @@ The package can be installed from Cran:
 install.packages("SynthCast")
 ```
 
-As well as from github:
+As well as from github, note that installing from github will install
+the latest development version:
 
 ``` r
 devtools::install_github(

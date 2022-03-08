@@ -10,6 +10,7 @@
 #' @param max_time_unit_of_interest Outout from intern_get_max_time_unit_of_interest().
 #'
 #' @return A dataset to be inputed in the compute_synthetic_control().
+#' @export
 #'
 #' @import dplyr forcats
 #' @importFrom forcats as_factor
@@ -20,9 +21,10 @@ prepare_dataset <- function(
   out <- tryCatch(
     {
       dataset <- df %>%
+        ungroup() %>%
         mutate(
-          unit_name_id = as.integer(as_factor(!!sym(all_of(col_unit_name)))),
-          unit_name = as.character(!!sym('unit_name_id'))
+          unit_name_id = as.integer(forcats::as_factor(!!sym(all_of(col_unit_name)))),
+          unit_name = as.character(!!sym(col_unit_name))
         ) %>%
         filter(
           !!sym(col_time) <= max_time_unit_of_interest
@@ -39,7 +41,7 @@ prepare_dataset <- function(
     },
     error=function(cond){
       print('Error in Function prepare_dataset():')
-      cond
+      print(cond)
     }
   )
   return(out)

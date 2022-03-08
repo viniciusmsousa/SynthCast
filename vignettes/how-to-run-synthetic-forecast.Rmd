@@ -123,3 +123,14 @@ kable(synthetic_forecast$output_projecao)
 - `projected_serie`: The forecasted serie;
 - `projected_serie_value`: The value of the seria/variable that was projected, from colun `projected_serie`;
 - `is_projected`: 1 indicates that the value is projected, 0 indicates that the value is observed.
+
+
+```{r}
+proj<- synthetic_forecast$output_projecao
+proj %>% glimpse()
+```
+
+
+
+
+

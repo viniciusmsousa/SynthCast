@@ -22,9 +22,11 @@ knitr::opts_chunk$set(
 [![CodeFactor](https://www.codefactor.io/repository/github/viniciusmsousa/synthcast/badge)](https://www.codefactor.io/repository/github/viniciusmsousa/synthcast)
 [![Codecov test coverage](https://codecov.io/gh/viniciusmsousa/SynthCast/branch/main/graph/badge.svg)](https://codecov.io/gh/viniciusmsousa/SynthCast?branch=main)
 [![R-CMD-check](https://github.com/viniciusmsousa/SynthCast/workflows/R-CMD-check/badge.svg)](https://github.com/viniciusmsousa/SynthCast/actions)
+`r badger::badge_devel("viniciusmsousa/SynthCast", "blue")`
 [![CRAN status](https://www.r-pkg.org/badges/version/SynthCast)](https://cran.r-project.org/package=SynthCast)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/SynthCast)](https://CRAN.R-project.org/package=SynthCast)
 <!-- badges: end -->
+
 
 ## Objective
 
@@ -48,7 +50,7 @@ install.packages("SynthCast")
 ```
 
 
-As well as from github:
+As well as from github, note that installing from github will install the latest development version:
 ```{r install from github command, eval=F}
 devtools::install_github(
     "viniciusmsousa/SynthCast",ref="main"

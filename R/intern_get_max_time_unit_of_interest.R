@@ -10,6 +10,7 @@
 #' @param col_time String with the column name of the time column.
 #'
 #' @return Same type as col_time, max value.
+#' @export
 #'
 intern_get_max_time_unit_of_interest <- function(
   df, col_unit_name, unit_of_interest, col_time
@@ -20,7 +21,7 @@ intern_get_max_time_unit_of_interest <- function(
     },
     error = function(cond){
       print('Error in Function intern_get_max_time_unit_of_interest():')
-      cond
+      print(cond)
     }
   )
   return(out)
