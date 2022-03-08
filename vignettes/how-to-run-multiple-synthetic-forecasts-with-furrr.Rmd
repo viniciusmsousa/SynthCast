@@ -1,0 +1,140 @@
+---
+title: "How to Run Multiple Synthetic Forecasts with Furrr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{How to Run Multiple Synthetic Forecasts with Furrr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This is a walk through of how the main package function `SynthCast::run_synthetic_forecast()` can be used with the [furrr package](https://furrr.futureverse.org/). The goal of furrr is to combine purrr’s family of mapping functions with future’s parallel processing capabilities. Therefore, the objective of this article is to show how you could run multiple forecasts in a parallel manner.
+
+Please fell free to contribute if you think of a batter way to do so! If you want see an usage example of the function `SynthCast::run_synthetic_forecast()` see the article [How to Run a Synthetic Forecast](https://viniciusmsousa.github.io/SynthCast/articles/how-to-run-synthetic-forecast.html). 
+
+Lets load the packages we will need:
+```{r load packages, warning=FALSE, message=FALSE}
+library(dplyr)
+library(purrr)
+library(future)
+library(furrr)
+```
+
+
+
+#### The Dataset
+
+The first thing that a forecast needs a data to be forecasted. The SynthCast provides a example of how it expected a dataset to look like, the code bellow loads the package and the example dataset:
+
+```{r load SynthCast and df_example}
+library(knitr)
+library(SynthCast)
+data('df_example')
+kable(head(df_example)) 
+```
+
+The dataset is expected to have 3 types of columns:
+
+- 1) *A unit column*: containing a numeric identification of the unit. In the credit card example this could the the customer, a group of customer, etc.,;
+- 2) *A time columns*: containing the time in integer. In the credit card example this would be the age in months of the respective unit (say 1 for first month, 2 for the second month, etc.,);
+- 3) *Feature Columns*: Numeric features, with both the serie(s) that will be forecasted as well as features to use to forecast. In the credit card this could be the profitability and transactional features.
+
+
+
+#### Setting Up the Requirements
+
+The solution that I present here consists of creating another dataset that will contain the parameters as columns and each row the combination of parameters. 
+
+So lets work with a practical example: Lets supose we want to forecasts 12 and 40 time periods for the units `30` and `40`, for the columns `x1` and `x3`.
+
+##### Dataframe with Parameters
+
+The first thing that we need is a dataframe with the parameters as columns, with the exeception of the dataset itself:
+
+```{r parameter dataframe}
+
+
+## parametros variaveis
+units_of_interest <- c(30,40)
+series_of_interest <- c('x1', 'x3')
+periods_to_forecast = c(12, 20) 
+
+col_time = c('time_period')
+col_unit_name = c('unit')
+periods_to_forecast = tidyr::tibble(
+  unit_of_interest = units_of_interest,
+  periods_to_forecast = periods_to_forecast
+)
+
+crossArg <- cross_df(
+  list(
+    unit_of_interest = units_of_interest,
+    serie_of_interest = series_of_interest,
+    col_time=col_time,
+    col_unit_name=col_unit_name
+  )
+) %>%
+  dplyr::left_join(periods_to_forecast, by='unit_of_interest')
+
+kable(crossArg)
+```
+
+
+
+
+##### Wrapper Function
+
+The second thing that we need is to define a function that will wrap the `SynthCast::run_synthetic_forecast()`. This is done because in order to map over multiple parameters with the `furrr` package with need the parameters in a dataframe. But we cannot put a dataframe in a column, without using column lists.
+
+Note that the object `df_example` that is called inside `f()` is a global parameter defined above. This is a workaround, but gets the job done. 
+
+```{r Wrapper Function for Run Synthetic Forecast}
+f = function(col_unit_name, unit_of_interest, col_time, periods_to_forecast, serie_of_interest){
+  synth_forecast = SynthCast::run_synthetic_forecast(
+    df=as.data.frame(df_example), # Global environment
+    col_unit_name=col_unit_name,
+    unit_of_interest=unit_of_interest,
+    col_time=col_time,
+    periods_to_forecast=periods_to_forecast,
+    serie_of_interest=serie_of_interest
+  )
+  return(synth_forecast)
+}
+```
+
+
+#### Running the Forecasts Parallelized
+
+Setup the parallel backend, as indicated in the `furrr` documentation:
+```{r furrr Parallel Backend}
+future::plan(multisession) # Setup to use multiple core
+```
+
+Now we can use the `furrr:future_pmap()` to run the forecasts:
+
+```{r Running Synthetic Forecasts}
+synthetic_forecasts <- furrr::future_pmap(
+  crossArg,
+  f
+)
+```
+
+The `synthetic_forecasts` object is a list of output from `SynthCast::run_synthetic_forecast()`.
+
+#### Bind Result Tables
+
+We can now bind the tables from the different forecasts together:
+
+```{r}
+mape_backtest = bind_rows(lapply(synthetic_forecasts, function(x) x$mape_backtest))
+
+kable(mape_backtest) 
+```
+
+
