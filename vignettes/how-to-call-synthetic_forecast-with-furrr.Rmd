@@ -21,6 +21,7 @@ Please fell free to contribute if you think of a batter way to do so! If you wan
 ```{r load packages, warning=FALSE, message=FALSE}
 library(dplyr)
 library(purrr)
+library(future)
 library(furrr)
 ```
 
