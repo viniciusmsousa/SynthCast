@@ -12,6 +12,7 @@
 #' @param periods_to_forecast (Integer) Number of periods to forecast.
 #'
 #' @return DataFrame with the columns: (i) col_unit_name and (ii) manter (bool)
+#' @export
 #'
 #' @import dplyr
 intern_elegile_units <- function(

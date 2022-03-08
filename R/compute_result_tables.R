@@ -12,6 +12,7 @@
 #' @param col_time String with the column name of the time column.
 #'
 #' @return List with result tables.
+#' @export
 #'
 #' @import dplyr tidyr Synth utils
 #'

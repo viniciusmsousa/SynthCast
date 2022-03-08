@@ -10,6 +10,7 @@
 #' @param max_time_unit_of_interest Outout from intern_get_max_time_unit_of_interest().
 #'
 #' @return A dataset to be inputed in the compute_synthetic_control().
+#' @export
 #'
 #' @import dplyr forcats
 #' @importFrom forcats as_factor

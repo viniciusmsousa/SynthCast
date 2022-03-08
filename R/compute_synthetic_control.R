@@ -12,6 +12,7 @@
 #' @param max_time_unit_of_interest Outout from intern_get_max_time_unit_of_interest().
 #'
 #' @return List with (i) Synth::dataprep() output and (ii) Synth::Synth() output.
+#' @export
 #'
 #' @import dplyr Synth
 #' @importFrom stats sd
