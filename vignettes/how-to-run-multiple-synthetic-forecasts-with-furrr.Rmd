@@ -18,6 +18,7 @@ This is a walk through of how the main package function `SynthCast::run_syntheti
 
 Please fell free to contribute if you think of a batter way to do so! If you want see an usage example of the function `SynthCast::run_synthetic_forecast()` see the article [How to Run a Synthetic Forecast](https://viniciusmsousa.github.io/SynthCast/articles/how-to-run-synthetic-forecast.html). 
 
+Lets load the packages we will need:
 ```{r load packages, warning=FALSE, message=FALSE}
 library(dplyr)
 library(purrr)
@@ -81,7 +82,7 @@ crossArg <- cross_df(
 ) %>%
   dplyr::left_join(periods_to_forecast, by='unit_of_interest')
 
-crossArg
+kable(crossArg)
 ```
 
 

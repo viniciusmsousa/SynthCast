@@ -90,6 +90,7 @@
     
 <p>This is a walk through of how the main package function <code><a href="../reference/run_synthetic_forecast.html">SynthCast::run_synthetic_forecast()</a></code> can be used with the <a href="https://furrr.futureverse.org/">furrr package</a>. The goal of furrr is to combine purrr’s family of mapping functions with future’s parallel processing capabilities. Therefore, the objective of this article is to show how you could run multiple forecasts in a parallel manner.</p>
 <p>Please fell free to contribute if you think of a batter way to do so! If you want see an usage example of the function <code><a href="../reference/run_synthetic_forecast.html">SynthCast::run_synthetic_forecast()</a></code> see the article <a href="https://viniciusmsousa.github.io/SynthCast/articles/how-to-run-synthetic-forecast.html">How to Run a Synthetic Forecast</a>.</p>
+<p>Lets load the packages we will need:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org">purrr</a></span><span class="op">)</span>
@@ -414,14 +415,53 @@
 <span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">periods_to_forecast</span>, by<span class="op">=</span><span class="st">'unit_of_interest'</span><span class="op">)</span>
 
-<span class="va">crossArg</span>
-<span class="co">#&gt; # A tibble: 4 x 5</span>
-<span class="co">#&gt;   unit_of_interest serie_of_interest col_time   col_unit_name periods_to_foreca…</span>
-<span class="co">#&gt;              &lt;dbl&gt; &lt;chr&gt;             &lt;chr&gt;      &lt;chr&gt;                      &lt;dbl&gt;</span>
-<span class="co">#&gt; 1               30 x1                time_peri… unit                          12</span>
-<span class="co">#&gt; 2               40 x1                time_peri… unit                          20</span>
-<span class="co">#&gt; 3               30 x3                time_peri… unit                          12</span>
-<span class="co">#&gt; 4               40 x3                time_peri… unit                          20</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">crossArg</span><span class="op">)</span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="20%">
+<col width="22%">
+<col width="14%">
+<col width="17%">
+<col width="24%">
+</colgroup>
+<thead><tr class="header">
+<th align="right">unit_of_interest</th>
+<th align="left">serie_of_interest</th>
+<th align="left">col_time</th>
+<th align="left">col_unit_name</th>
+<th align="right">periods_to_forecast</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">30</td>
+<td align="left">x1</td>
+<td align="left">time_period</td>
+<td align="left">unit</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="right">40</td>
+<td align="left">x1</td>
+<td align="left">time_period</td>
+<td align="left">unit</td>
+<td align="right">20</td>
+</tr>
+<tr class="odd">
+<td align="right">30</td>
+<td align="left">x3</td>
+<td align="left">time_period</td>
+<td align="left">unit</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="right">40</td>
+<td align="left">x3</td>
+<td align="left">time_period</td>
+<td align="left">unit</td>
+<td align="right">20</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="wrapper-function" class="section level5">
 <h5 class="hasAnchor">
