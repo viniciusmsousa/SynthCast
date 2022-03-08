@@ -5,7 +5,11 @@ This is a submission of a patch version release. In this version I have:
 * Exports internal (documented) functions to NAMESPACE.
 
 ## Test environments
-* MultipleR version (from 3.6 to 4.1) in multiple Ubuntu, Win and MacOs in github actions.
+Github Actions
+* macOS-latest,   r: 'release';
+* windows-latest, r: 'release';
+* windows-latest, r: '3.6';
+* ubuntu-18.04,   r: '3.6'.
 
 ## R CMD check results
 
