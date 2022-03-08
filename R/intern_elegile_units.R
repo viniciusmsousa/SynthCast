@@ -31,7 +31,7 @@ intern_elegile_units <- function(
     },
     error = function(cond){
       print('Error in Function intern_elegile_units():')
-      cond
+      print(cond)
     }
   )
   return(out)

@@ -139,7 +139,7 @@ compute_result_tables <- function(
     },
     error=function(cond){
       print('Error in Function compute_result_tables():')
-      cond
+      print(cond)
     }
   )
   return(out)

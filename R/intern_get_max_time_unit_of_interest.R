@@ -20,7 +20,7 @@ intern_get_max_time_unit_of_interest <- function(
     },
     error = function(cond){
       print('Error in Function intern_get_max_time_unit_of_interest():')
-      cond
+      print(cond)
     }
   )
   return(out)
