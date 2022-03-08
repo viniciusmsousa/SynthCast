@@ -2,7 +2,7 @@ pandoc: 2.11.4
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
-  how-to-call-synthetic_forecast-with-furrr: how-to-call-synthetic_forecast-with-furrr.html
+  how-to-run-multiple-synthetic-forecasts-with-furrr: how-to-run-multiple-synthetic-forecasts-with-furrr.html
   how-to-run-synthetic-forecast: how-to-run-synthetic-forecast.html
-last_built: 2022-03-08T18:33Z
+last_built: 2022-03-08T21:36Z
 
