@@ -23,7 +23,6 @@
 #' serie_of_interest = 'x1'
 #' )
 #' }
-#'
 run_synthetic_forecast <- function(
   df, col_unit_name, unit_of_interest, col_time, periods_to_forecast,
   serie_of_interest
