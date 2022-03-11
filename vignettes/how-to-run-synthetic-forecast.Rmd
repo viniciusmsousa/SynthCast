@@ -124,10 +124,18 @@ kable(synthetic_forecast$output_projecao)
 - `projected_serie_value`: The value of the seria/variable that was projected, from colun `projected_serie`;
 - `is_projected`: 1 indicates that the value is projected, 0 indicates that the value is observed.
 
+### Plotting the Projection
 
-```{r}
+The easiest way to plot the projection is to use the `ggplot2` package with just a few line of code
+
+```{r plot projection, fig.width=8}
+library(ggplot2)
 proj<- synthetic_forecast$output_projecao
-proj %>% glimpse()
+
+proj %>% 
+  ggplot(aes(x=time_period,y=projected_serie_value, color=is_projected))+
+  geom_line()+
+  theme(legend.position="none")
 ```
 
 

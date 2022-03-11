@@ -28,6 +28,7 @@ Suggests:
     badger,
     purrr,
     future,
-    furrr
+    furrr,
+    ggplot2
 Config/testthat/edition: 3
 VignetteBuilder: knitr
