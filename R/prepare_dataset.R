@@ -23,7 +23,7 @@ prepare_dataset <- function(
       dataset <- df %>%
         ungroup() %>%
         mutate(
-          unit_name_id = as.integer(forcats::as_factor(!!sym(all_of(col_unit_name)))),
+          unit_name_id = as.integer(forcats::as_factor(!!sym(col_unit_name))),
           unit_name = as.character(!!sym(col_unit_name))
         ) %>%
         filter(
@@ -31,13 +31,13 @@ prepare_dataset <- function(
         ) %>%
         left_join(
           df_elegible_units,
-          by = all_of(col_unit_name)
+          by = col_unit_name
         ) %>%
         filter(
-          (!!sym('manter') == T | !!sym(all_of(col_unit_name)) == as.character(unit_of_interest))
+          (!!sym('manter') == T | !!sym(col_unit_name) == as.character(unit_of_interest))
         ) %>%
-        select(-c(!!sym(all_of(col_unit_name)),!!sym('manter'))) %>%
-        relocate(c(!!sym('unit_name'),!!sym('unit_name_id')))
+        select(-all_of(c(col_unit_name, 'manter'))) %>%
+        relocate(c('unit_name', 'unit_name_id'))
     },
     error=function(cond){
       print('Error in Function prepare_dataset():')
